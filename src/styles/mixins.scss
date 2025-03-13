@@ -1,0 +1,43 @@
+@mixin flex-container{
+    display: flex;
+    flex-direction: column;
+}
+@mixin flex-row{
+    display: flex;
+    flex-direction: row;
+}
+@mixin label-styling{
+    margin-bottom: 6px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    color: #343A40
+}
+@mixin input-styling{
+    border: 1px solid #DEE2E6;
+    border-radius: 5px;
+    padding: 14px;
+    font-size: 16px;
+}
+
+@mixin span-styling{
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: #6C757D
+}
+
+@mixin default-chosen-item{
+    border: 1px solid #CED4DA;
+    border-radius: 5px;
+    justify-content: space-between;
+    align-items: center;
+padding: 14px;
+font-size: 14px;
+letter-spacing: 0.5px;
+color: #0D0F10;
+}
+@mixin li-styling{
+    padding: 14px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    color: #0D0F10;
+}

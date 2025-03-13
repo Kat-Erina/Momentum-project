@@ -2,7 +2,7 @@ header{
     display: flex;
     justify-content: space-between;
     padding:30px 0;
-    border: 1px solid black;
+    margin-bottom:45px;
     img{
         width:210px;
         height: 38px;
@@ -34,7 +34,7 @@ border:1px solid #8338EC;
             border-radius: 5px;
             color: white;
             letter-spacing: 0.5px;
-
+text-decoration: none;
           i{
             font-weight: lighter;
           }

@@ -1,0 +1,211 @@
+@import './../../../styles/mixins.scss';
+
+.task-main-container{
+    width:1684px;
+    background-color: #DDD2FF;
+    margin-top: 30px;
+    height: 9;
+    min-height: 750px;
+    form{
+        // border: 1px solid black;
+        @include flex-row;
+        gap:70px;
+        padding-top: 65px;
+        padding-left: 55px;
+        .sub-container-one{
+            width:550px;
+            // border: 1px solid black;
+            @include flex-container;
+            gap:55px;
+            .title-container{
+            @include flex-container;
+            label{
+              @include label-styling
+            };
+            input{
+             @include input-styling;
+             outline: none
+            };
+            span{
+              @include span-styling
+            }
+            }
+            .description-container{
+                @include flex-container;
+                label{
+                    @include label-styling
+                };
+                textarea{
+                    @include input-styling;
+                    height: 133px;
+                    outline: none
+                };
+                span{
+                    @include span-styling
+                }
+            }
+            .priority-container{
+                width: 100%;
+                @include flex-row;
+                gap:32px;
+                .priority{
+                    width:259px;
+                    @include flex-container;
+                    .label{
+                        @include label-styling
+                    };
+                    .selected{
+                        width: 100%;
+                        .default-priority{
+                            background-color: white;
+                           @include default-chosen-item;
+                            @include flex-row;
+            
+    div{
+        display: flex;
+        gap:6px;
+      
+    }
+                        }
+                        .dropdown-options{
+                            list-style: none;
+                            // border: 1px solid black;
+                            background-color: white;
+                            border-radius: 5px;
+                            li{
+                                @include flex-row;
+                                gap: 6px;
+                               align-items: center;
+                               @include li-styling
+    
+                            }
+                        }
+                        }
+                 
+                }
+                .status{
+                    width:259px;
+                    @include flex-container;
+                    .label{
+                      @include label-styling
+                       
+                    };
+                    .selected{
+                    width: 100%;
+                    .default-priority{
+                        background-color: white;
+                        @include default-chosen-item;
+                        @include flex-row
+                    }
+                    .dropdown-options{
+                        border-radius: 5px;
+                        background-color: white;
+                        list-style: none;
+                        border-radius: 5px;
+                        // border: 1px solid black;
+                        li{
+                           align-items: center;
+             @include li-styling
+
+                        }
+                    }
+                    }
+                }
+                
+            }
+        }
+        .sub-container-two{
+            width:550px;
+            // border: 1px solid black;
+            @include flex-container;
+            gap:55px;
+            .btn-div{
+                display: flex;
+                justify-content: flex-end;
+            }
+            button{
+                background-color: #8338EC;
+                width:208px;
+                padding: 10px 20px;
+                border-radius: 5px;
+                font-size: 18px;
+                text-align: center;
+                letter-spacing: 0.5px;
+                float: right;
+                border: none;
+                color: white
+            }
+        
+        .department-container, .employee-container{
+            width:100%;
+            // border: 1px solid red;
+            @include flex-container;
+            .label{
+              @include label-styling
+               
+            };
+            .selected{
+            width: 100%;
+            .default-priority{
+              background-color: white;
+                @include default-chosen-item;
+                @include flex-row
+            }
+            .dropdown-options{
+                position: absolute;
+                background-color: white;
+                list-style: none;
+                border-radius: 5px;
+                // border: 1px solid black;
+                width: 548px;
+                .add-employee{@include flex-row;
+                    padding: 12px 15px;
+                    gap:6px;
+                    span{
+                        height: 20px;
+                        width: 20px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 18px;
+                        border-radius: 50%;
+                        border: 1.5px solid #8338EC;
+                        color: #8338EC;
+                        font-weight: bold;
+                    }
+                    p{
+                        font-size: 16px;
+                        letter-spacing: 0.5px
+                    }
+                }
+                li{
+                    @include flex-row;
+                    gap:6px;
+                   align-items: center;
+                   padding:12px 14px;
+                   font-size: 14px;
+                   img{
+                    width:28px;
+                    height: 28px;
+                    border-radius: 50%;
+                   }
+     @include li-styling
+
+                }
+            }
+            }
+        }}
+    }
+}
+
+.valid{
+color: #08A508 !important;
+}
+
+.invalid{
+    color: #FA4D4D!important
+}
+
+.invalid-border{
+border: 1px solid #FA4D4D !important;
+}

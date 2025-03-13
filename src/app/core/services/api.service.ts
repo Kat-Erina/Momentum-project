@@ -1,5 +1,6 @@
 import { HttpClient, HttpHandler, HttpHeaders } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
+import { Department, Employee, Priority, Status } from "../models/models";
 
 @Injectable({
     'providedIn':'root'
@@ -16,20 +17,27 @@ return this.http.get(`${this.apiUrl}/tasks`, {headers})
     }
 
     getStatuses(){   
-return this.http.get(`${this.apiUrl}/statuses`)
+return this.http.get<Status[]>(`${this.apiUrl}/statuses`)
     }
 
     getPriorities(){   
-        return this.http.get(`${this.apiUrl}/priorities`)
+        return this.http.get<Priority[]>(`${this.apiUrl}/priorities`)
      }
 
      getDepartments(){   
-        return this.http.get(`${this.apiUrl}/departments`)
+        return this.http.get<Department[]>(`${this.apiUrl}/departments`)
      }
      getEmployees(){   
         const headers = new HttpHeaders({
             Authorization: `Bearer ${this.token}`,
           });
-        return this.http.get(`${this.apiUrl}/employees`, {headers})
+        return this.http.get<Employee[]>(`${this.apiUrl}/employees`, {headers})
+     }
+
+     handleTaskSubmission(data:any){
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${this.token}`,
+          });
+        return this.http.post<any[]>(`${this.apiUrl}/tasks`, data,{headers})
      }
 }

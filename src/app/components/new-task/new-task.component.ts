@@ -3,8 +3,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
 import { Department, Employee, Priority, Status } from '../../core/models/models';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// import { CalendarComponent } from './calendar/calendar.component';
-import { debounce } from './helper';
+import { Data } from '@angular/router';
+import { SharedService } from '../../core/services/sharedFunctions.service';
 
 @Component({
   selector: 'app-new-task',
@@ -13,34 +13,33 @@ import { debounce } from './helper';
   styleUrl: './new-task.component.scss'
 })
 export class NewTaskComponent implements OnInit {
-  apiService=inject(ApiService)
+  apiService=inject(ApiService);
+  sharedService=inject(SharedService);
+
+  data!:Data
   value=signal('');
   formSubmited=signal(false)
 
   priorities=signal<Priority[]>([])
   dropdownOpen = signal(false);
   selectedOption=signal<Priority | null>(null);
-  selectedOptionValid=signal(false)
 
   statuses=signal<Status[]>([])
   dropdownOpenStatus = signal(false);
   selectedStatusOption=signal<Status|null>(null);
-  selectedStatusValid=signal(false)
 
   departments=signal<Department[]>([])
   dropdownOpenDepartment = signal(false);
   selectedDepartmentOption=signal<Department|null>(null);
-  selectedDepartmentValid=signal(false)
 
   employees=signal<Employee[]>([])
   dropdownOpenEmployees = signal(false);
   selectedEmployee=signal<Employee|null>(null);
-  selectedEmployeeValid=signal(false)
 
 
   form:FormGroup=new FormGroup({
-    title:new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
-    description:new FormControl('', [Validators.required])
+    title:new FormControl(this.data?.['title'] || '', [Validators.required]),
+    description:new FormControl('')
   })
 
   get titleValidation(){
@@ -51,13 +50,34 @@ export class NewTaskComponent implements OnInit {
     return this.form.get('description');
   }
 
+  doesNotHaveEnoughWords=true;
+  checkWordCount(value:string) {
+    const words = value?.trim().split(/\s+/) || [];
+    this.doesNotHaveEnoughWords = words.length < 4;
+  }
+
+  titleIsNotValid=true
+  checkTitleValidation(value: string) {
+    this.titleIsNotValid = value?.length < 2 || value?.length >255}
+
+ 
+  
+
 get validation(){
  return this.selectedOption() && this.selectedStatusOption() && this.selectedDepartmentOption() && this.selectedEmployee()
 }
+
+
+
   loadPriorities(){
     this.apiService.getPriorities().subscribe({
       next:(response)=>{
-          this.priorities.set(response)
+          this.priorities.set(response);
+          if(this.data?.['priority']){
+            this.selectedOption.set(this.data?.['priority']);
+          } else{
+            this.selectedOption.set(response[1]);
+          }
         
       }
     })
@@ -67,6 +87,12 @@ get validation(){
     this.apiService.getStatuses().subscribe({
       next:(response)=>{
         this.statuses.set(response)
+        if(this.data?.['status']){
+          this.selectedStatusOption.set(this.data?.['status']);
+        } else{
+          this.selectedStatusOption.set(response[0]);
+        }
+
       }
     })
   }
@@ -75,27 +101,42 @@ get validation(){
     this.apiService.getDepartments().subscribe({
       next:response=>{
         this.departments.set(response)
+        if(this.data?.['department']){
+          this.selectedDepartmentOption.set(this.data?.['department']);
+        } 
       }
     })
   }
-  loadEmployees(){
-    this.apiService.getEmployees().subscribe(
-      {
-        next:response=>{         
-          if(this.selectedDepartmentOption())
-          this.employees.set(response)
-        }
-      }
-    )
-  }
+ 
+  
   ngOnInit(): void {
-    this.loadPriorities()
-    this.loadStatuses()
-    this.loadDepartments()
-    console.log(this.formSubmited())
+// localStorage.clear()
+let fetchedData=localStorage.getItem('taskData');
+if(fetchedData){
+  this.data=JSON.parse(fetchedData);
+  this.form.patchValue({ 
+    title: this.data ? this.data['title'] : '', 
+    description: this.data ? this.data['description'] : '' 
+  });
+  
+this.selectedEmployee.set(this.data?.['employee'])}
+  this.loadPriorities();
+  this.loadStatuses()
+  this.loadDepartments();
+ 
+      this.form.get('description')?.valueChanges.subscribe(value => {
+      this.checkWordCount(value);
+      this.updateFieldData('description', value,)
+    });
+    this.form.get('title')?.valueChanges.subscribe((value:string) => {
+      console.log(value)
+      this.checkTitleValidation(value);
+      this.updateFieldData('title', value)
+    });
+  
   }
  
-
+  
   toggleDropdown(option:string) {
     if(option==="priorities"){
       this.dropdownOpen.set(!this.dropdownOpen()) ;
@@ -104,8 +145,8 @@ get validation(){
       this.dropdownOpenStatus.set(!this.dropdownOpenStatus()) ;
     }
     if(option==="departments"){
-      this.dropdownOpenDepartment.set(!this.dropdownOpenDepartment()) ;
-    
+      this.dropdownOpenDepartment.set(!this.dropdownOpenDepartment());
+      this.dropdownOpenEmployees.set(false) 
     }
     if(option==="employees"){
       this.dropdownOpenEmployees.set(!this.dropdownOpenEmployees()) ;
@@ -113,49 +154,56 @@ get validation(){
     }
   }
 
+updateFieldData(field:string, value:Priority|Status|Department|Employee|string|null){
+  if(field==='department'){
+    this.data = {
+      ...this.data,  
+      [field]: value,
+      'employee':""
+    };}
+  this.data = {
+    ...this.data,  
+    [field]: value
+  };
+  localStorage.setItem('taskData', JSON.stringify(this.data));
+}
+
   selectOption(option: any, chosenField:string) {
     if(chosenField==="priorities"){
       this.selectedOption.set(option);
     this.dropdownOpen.set(false);
-    this.selectedOptionValid.set(true)
+    this.updateFieldData('priority', this.selectedOption())
     }
     if(chosenField==="statuses"){
       this.selectedStatusOption.set(option);
+      this.updateFieldData('status', this.selectedStatusOption())
     this.dropdownOpenStatus.set(false);
-    this.selectedStatusValid.set(true)
-    }
+  }
     if(chosenField==="departments"){
       this.selectedDepartmentOption.set(option);
     this.dropdownOpenDepartment.set(false);
-    this.loadEmployees();
-    this.selectedDepartmentValid.set(true)
+    this.updateFieldData('department', this.selectedDepartmentOption())
+    this.apiService.getEmployees().subscribe({
+      next:(response)=>{
+      let data=response.filter(empl=>{
+          return empl.department.id===this.selectedDepartmentOption()?.id
+        });
+this.employees.set(data)
+      }
+    })
+this.selectedEmployee.set(null);
     }
     if(chosenField==="employees"){
       this.selectedEmployee.set(option);
+      this.updateFieldData('employee', this.selectedEmployee())
     this.dropdownOpenEmployees.set(false);
-    this.selectedEmployeeValid.set(true)
     }
    
   }
 
   handleSubmit() {
     this.formSubmited.set(true);
-      console.log(this.formSubmited())
-    if(!this.selectedOption()){
-this.selectedOptionValid.set(false)
-    }
-    if(!this.selectedStatusOption()){
-      this.selectedStatusValid.set(false)
-          }
-    if(!this.selectedDepartmentOption()){
-      this.selectedDepartmentValid.set(false)
-          }
-          if(!this.selectedEmployee()){
-            this.selectedEmployeeValid.set(false)
-                }
-              
                 if (this.form.valid && this.validation) {
-                  console.log('Submitting data:', this.form.value);
                   let data={
                     name: this.form.get('title')?.value,
   description: this.form.get('description')?.value,
@@ -164,24 +212,12 @@ this.selectedOptionValid.set(false)
   employee_id: this.selectedEmployee()?.id,
   priority_id: this.selectedOption()?.id
                   }
-                  console.log(data)
 this.apiService.handleTaskSubmission(data).subscribe({
   next:(response)=>{
-    console.log(response)
+    if(response)
+    localStorage.removeItem('taskData');
   }
-})
-                } 
-                
-    
-  }
+})} 
+    }
 
-  debouncedSearch = debounce((value: string) => {
-    console.log('Searching for:', value);
-  }, 1000);
-
-  onValueChange(event: Event) {
-    const input = (event.target as HTMLInputElement).value;
-    this.value.set(input);
-    this.debouncedSearch(input); 
-  }
 }

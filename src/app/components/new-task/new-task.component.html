@@ -4,40 +4,43 @@
         <div class="sub-container-one">
 <div class="title-container">
     <label>სათაური*</label>
-<input type="text" formControlName="title" (input)="onValueChange($event)" [ngClass]="{
-    'invalid-border': titleValidation?.dirty && 
-                      (titleValidation?.value.length < 2 || titleValidation?.value.length > 255)
+<input type="text" formControlName="title" [ngClass]="{
+    'invalid-border': 
+      (formSubmited() && titleValidation?.invalid) ||
+      (!formSubmited() && titleValidation?.dirty&& (titleValidation?.value?.length < 2 || titleValidation?.value?.length > 255))
   }">
 <span  [ngClass]="{
     'valid': titleValidation?.dirty && titleValidation?.value.length >= 2,
-    'invalid': titleValidation?.dirty && titleValidation?.value.length < 2
-  }">მინიმუმ 2 სიმბოლო</span>
+    'invalid': (formSubmited() && titleValidation?.invalid) || !formSubmited() && titleValidation?.dirty && titleValidation?.value.length < 2
+  }">მინიმუმ 3 სიმბოლო</span>
 <span [ngClass]="{
     'valid': titleValidation?.dirty && titleValidation?.value.length <= 255 && titleValidation?.value.length>=2,
-    'invalid': titleValidation?.dirty && titleValidation?.value.length >255 
+    'invalid':(formSubmited() && titleValidation?.invalid) || !formSubmited() && titleValidation?.dirty && titleValidation?.value.length >255 
   }">მაქსიმუმ 255 სიმბოლო</span>
 </div>
 <div class="description-container">
     <label>აღწერა</label>
 <textarea formControlName="description" [ngClass]="{
-    'invalid-border': description?.dirty && 
-                      (description?.value.length < 2 || description?.value.length > 255)
+    'invalid-border': 
+      formSubmited() && description?.value.length>0 && (description?.value.length>255 || doesNotHaveEnoughWords) ||
+      (!formSubmited() && description?.dirty&& (doesNotHaveEnoughWords || description?.value?.length > 255))
   }"></textarea>
 <span [ngClass]="{
-    'valid': description?.dirty && description?.value.length >= 2,
-    'invalid': description?.dirty && description?.value.length < 2
-  }">მინიმუმ 2 სიმბოლო</span>
+    'valid': description?.dirty && !doesNotHaveEnoughWords,
+    'invalid': (formSubmited() && description?.value.length>0 && doesNotHaveEnoughWords) || !formSubmited() && description?.dirty && doesNotHaveEnoughWords
+  }">მინიმუმ 4 სიტყვა</span>
 <span  [ngClass]="{
     'valid': description?.dirty && description?.value.length <= 255 && description?.value.length>=2,
-    'invalid': description?.dirty && description?.value.length >255
+    'invalid': (formSubmited() && description?.value.length >255) || !formSubmited() && description?.dirty && description?.value.length >255
   }">მაქსიმუმ 255 სიმბოლო</span>
 </div>
 <div class="priority-container">
     <div class="priority">
         <p class="label">პრიორიტეტი*</p>
-        <div class="selected" [ngClass]="{'invalid-border':formSubmited() && !selectedOptionValid()}"> 
-            <div class="default-priority" (click)="toggleDropdown('priorities')" [ngClass]="{'invalid-border':formSubmited() && !selectedOptionValid()}">
-               <div> <img src="{{selectedOption()?.icon}}">
+        <div class="selected"> 
+              <div class="default-priority" (click)="toggleDropdown('priorities')" [ngClass]="{'invalid-border':formSubmited() && !selectedOption()}">
+             <div> 
+                <img src="{{selectedOption()?.icon}}">
                 <p>{{selectedOption()?.name}}</p></div>
                  <i class="fa-solid"  [ngClass]="dropdownOpen() ? 'fa-angle-up' : 'fa-angle-down'"></i></div>
         @if(dropdownOpen()){
@@ -57,7 +60,7 @@
 <div class="status">
     <p class="label">სტატუსი*</p>
         <div class="selected"> 
-            <div class="default-priority" (click)="toggleDropdown('statuses')" [ngClass]="{'invalid-border':formSubmited() && !selectedStatusValid()}">
+            <div class="default-priority" (click)="toggleDropdown('statuses')" [ngClass]="{'invalid-border':formSubmited() && !selectedStatusOption()}">
                 <p>{{selectedStatusOption()?.name}}</p>
                  <i class="fa-solid"  [ngClass]="dropdownOpenStatus() ? 'fa-angle-up' : 'fa-angle-down'"></i></div>
         @if(dropdownOpenStatus()){
@@ -78,12 +81,11 @@
 </div>
         </div>
 
-    <!-- meore div -->
 <div class="sub-container-two">
         <div class="department-container">
             <p class="label">დეპარტამენტი*</p>
             <div class="selected"> 
-                <div class="default-priority" (click)="toggleDropdown('departments')" [ngClass]="{'invalid-border':formSubmited() && !selectedDepartmentValid()}">
+                <div class="default-priority" (click)="toggleDropdown('departments')" [ngClass]="{'invalid-border':formSubmited() && !selectedDepartmentOption()}">
                     <p>{{selectedDepartmentOption()?.name}}</p>
                      <i class="fa-solid"  [ngClass]="dropdownOpenDepartment() ? 'fa-angle-up' : 'fa-angle-down'"></i></div>
             @if(dropdownOpenDepartment()){
@@ -100,7 +102,7 @@
         
         <p class="label">პასუხისმგებელი თანამშრომელი*</p>
         <div class="selected"> 
-            <div class="default-priority" (click)="toggleDropdown('employees')" [ngClass]="{'invalid-border':formSubmited() && !selectedEmployeeValid()}">
+            <div class="default-priority" (click)="toggleDropdown('employees')" [ngClass]="{'invalid-border':formSubmited() && !selectedEmployee()}">
                 <div style="display: flex;align-items: center; gap:10px">
                     @if(selectedEmployee()) {<img src="{{selectedEmployee()?.avatar}}" style="width: 30px; height: 30px; border-radius: 50%;">}
                      <p>{{selectedEmployee()?.name}} {{selectedEmployee()?.surname}}</p></div>

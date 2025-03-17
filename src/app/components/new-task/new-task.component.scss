@@ -1,11 +1,16 @@
 @import './../../../styles/mixins.scss';
-
+h1{
+    margin-left: 120px;
+    margin-right: 120px;
+}
 .task-main-container{
+    margin-left: 120px;
     width:1684px;
     background-color: #DDD2FF;
     margin-top: 30px;
     height: 9;
     min-height: 750px;
+    padding: 0 120px;
     form{
         @include flex-row;
         gap:70px;
@@ -77,6 +82,3 @@ color: #08A508 !important;
     color: #FA4D4D!important
 }
 
-.invalid-border{
-border: 1px solid #FA4D4D !important;
-}

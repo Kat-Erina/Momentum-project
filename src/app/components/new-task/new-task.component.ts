@@ -4,7 +4,6 @@ import { ApiService } from '../../core/services/api.service';
 import { Department, Employee, Priority, Status } from '../../core/models/models';
 import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Data } from '@angular/router';
-import { SharedService } from '../../core/services/sharedFunctions.service';
 import { InputComponent } from "../../core/components/input/input.component";
 import { DropdownComponent } from "../../core/components/dropdown/dropdown.component";
 
@@ -17,9 +16,8 @@ import { DropdownComponent } from "../../core/components/dropdown/dropdown.compo
 })
 export class NewTaskComponent implements OnInit {
   apiService=inject(ApiService);
-  sharedService=inject(SharedService);
   title:string="";
-  description=signal<string>('');
+  description:string=" ";
   descriptionFocused=signal<boolean>(false)
 
   handleTitleValueChange(value: string) {
@@ -33,13 +31,12 @@ export class NewTaskComponent implements OnInit {
   checkWordCount(value:string) {
     const words = value?.trim().split(/\s+/) || [];
     this.doesNotHaveEnoughWords.set(words.length < 4)
-    console.log(this.doesNotHaveEnoughWords())
   }
 
   handleTextAreaValueChange(value:string){
     console.log(value)
     this.descriptionFocused.set(true)
-this.description.set(value)
+this.description=value
 this.checkWordCount(value)
 this.updateFieldData('description', value,)
   }
@@ -73,6 +70,7 @@ this.updateFieldData('description', value,)
             this.selectedOption.set(this.data?.['priority']);
           } else{
             this.selectedOption.set(response[1]);
+            // this.updateFieldData('priority', this.selectedOption())
           }
         
       }
@@ -106,9 +104,15 @@ this.updateFieldData('description', value,)
         return empl.department.id===this.selectedDepartmentOption()?.id
       });
 this.employees.set(data)
+console.log(data)
     }
   })
 this.selectedEmployee.set(null);
+  }
+  if(chosenField==="employees"){
+    this.selectedEmployee.set(option);
+    this.updateFieldData('employee', this.selectedEmployee())
+  this.dropdownOpenEmployees.set(false);
   }
   }
 
@@ -121,6 +125,7 @@ this.selectedEmployee.set(null);
           this.selectedStatusOption.set(this.data?.['status']);
         } else{
           this.selectedStatusOption.set(response[0]);
+          // this.updateFieldData('status', this.selectedStatusOption())
         }
 
       }
@@ -141,20 +146,37 @@ this.selectedEmployee.set(null);
   
   ngOnInit(): void {
 // localStorage.clear()
+console.log('title',this.title)
+
 let fetchedData=localStorage.getItem('taskData');
 if(fetchedData){
   this.data=JSON.parse(fetchedData);
    this.title=this.data ? this.data['title'] : '';
-   this.description.set( this.data ? this.data['description'] : '')
-  this.selectedEmployee.set(this.data?.['employee'])}
-  this.loadPriorities();
-  this.loadStatuses()
-  this.loadDepartments();
-  
+   this.description=this.data ? this.data['description'] : '';
+   this.selectedDepartmentOption.set(this.data?.['department'])
+   this.selectedStatusOption.set(this.data?.['status'])
+   this.selectedOption.set(this.data?.['priority'])
+this.selectedEmployee.set(this.data?.['employee'])}
+this.loadPriorities();
+this.loadStatuses()
+this.loadDepartments();
+
+if(this.selectedDepartmentOption()){
+  this.apiService.getEmployees().subscribe({
+    next:(response)=>{
+    let data=response.filter(empl=>{
+        return empl.department.id===this.selectedDepartmentOption()?.id 
+      });
+this.employees.set(data)
+console.log(data)
+    }
+  })
+}
   }
  
   
-  toggleDropdown(option:string) {
+  toggleDropdownFn(option:string) {
+    console.log(option)
     if(option==="priorities"){
       this.dropdownOpen.set(!this.dropdownOpen()) ;
     }
@@ -162,7 +184,6 @@ if(fetchedData){
       this.dropdownOpenStatus.set(!this.dropdownOpenStatus()) ;
     }
     if(option==="departments"){
-      this.dropdownOpenDepartment.set(!this.dropdownOpenDepartment());
       this.dropdownOpenEmployees.set(false) 
     }
     if(option==="employees"){
@@ -185,47 +206,16 @@ updateFieldData(field:string, value:Priority|Status|Department|Employee|string|n
   localStorage.setItem('taskData', JSON.stringify(this.data));
 }
 
-  selectOption(option: any, chosenField:string) {
-  //   if(chosenField==="priorities"){
-  //     this.selectedOption.set(option);
-  //   this.dropdownOpen.set(false);
-  //   this.updateFieldData('priority', this.selectedOption())
-  //   }
-  //   if(chosenField==="statuses"){
-  //     this.selectedStatusOption.set(option);
-  //     this.updateFieldData('status', this.selectedStatusOption())
-  //   this.dropdownOpenStatus.set(false);
-  // }
-    if(chosenField==="departments"){
-      this.selectedDepartmentOption.set(option);
-    this.dropdownOpenDepartment.set(false);
-    this.updateFieldData('department', this.selectedDepartmentOption())
-    this.apiService.getEmployees().subscribe({
-      next:(response)=>{
-      let data=response.filter(empl=>{
-          return empl.department.id===this.selectedDepartmentOption()?.id
-        });
-this.employees.set(data)
-      }
-    })
-this.selectedEmployee.set(null);
-    }
-    if(chosenField==="employees"){
-      this.selectedEmployee.set(option);
-      this.updateFieldData('employee', this.selectedEmployee())
-    this.dropdownOpenEmployees.set(false);
-    }
-   
-  }
+
 
   handleSubmit() {
     this.formSubmited.set(true);
-if( this.selectedOption() && this.selectedStatusOption() && this.selectedDepartmentOption() && this.selectedEmployee() && this.title.length>3 && this.title.length<256 && this.description.length<256 && !this.doesNotHaveEnoughWords())
+if(this.selectedOption() && this.selectedStatusOption() && this.selectedDepartmentOption() && this.selectedEmployee() && this.title?.length>3 && this.title?.length<256 && this.description?.length<256 && !this.doesNotHaveEnoughWords())
                 {
                   let data={
        
   name:this.title,
-  description:this.description(),
+  description:this.description,
   due_date: "2025-12-31",
   status_id: this.selectedStatusOption()?.id,
   employee_id: this.selectedEmployee()?.id,

@@ -1,21 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { EmployeeModalComponent } from '../employee-modal/employee-modal.component';
+import { SharedService } from '../../core/services/shared.service';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, MatDialogModule],
+  imports: [RouterLink],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-dialog=inject(MatDialog);
-
-opendialog(){
-  this.dialog.open(EmployeeModalComponent, {
-   width:'913px',
-   height:'500px'
-  })
-}
+  service=inject(SharedService)
+  employeeModalIsOpen=this.service.employeeModalIsOpen
+  opendialog(){
+this.employeeModalIsOpen.set(true)
+  }
 }

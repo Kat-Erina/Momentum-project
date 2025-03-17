@@ -1,21 +1,27 @@
 <div class="priority">
     <p class="label">{{label}}</p>
     <div class="selected"> 
-          <div class="default-priority" (click)="toggleDropdown(dropDownTarget)">
+          <div class="default-priority" (click)="handleToggle(dropDownTarget)" [ngClass]="{'invalid-border': formSubmited() && !selectedOption()}">
          <div> 
             <img src="{{selectedOption()?.icon}}">
-            <p>{{selectedOption()?.name}}</p></div>
-             <i class="fa-solid" ></i></div>
+            <img src="{{selectedOption()?.avatar}}">
+            <p>{{selectedOption()?.name}} {{selectedOption()?.surname}} </p></div>
+             <i class="fa-solid" [ngClass]="dropdownOpen()? 'fa-angle-up': 'fa-angle-down'" ></i></div>
     @if(dropdownOpen()){
-        
-        <ul class="dropdown-options" >
+        <ul [ngClass]="customclass" >
            @if(label==='პასუხისმგებელი თანამშრომელი*'){
-            <li>fjfjfjfjfadd</li>
+            <li class="add-empl"><span>+</span> დაამატე თანამშრომელი</li>
            }
             @for(priority of data(); track priority.id){
                 <li (click)="selectOption(priority, dropDownTarget)" >
-                    <img src="{{priority?.icon}}">
+                  @if(priority.icon){<img src="{{priority?.icon}}">}  
+                  @if(priority.avatar) {<img src="{{priority?.avatar}}">}
+                   @if(priority.surname){
+                    <span>{{ priority.name }} {{priority?.surname}}</span>
+                   } 
+                   @else{
                     <span>{{ priority.name }}</span>
+                   }
                   </li>
             }
             

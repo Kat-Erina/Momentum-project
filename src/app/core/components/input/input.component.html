@@ -1,0 +1,11 @@
+<label >{{labelValue}}</label>
+<input type="text" [ngModel]="model" (ngModelChange)="onInputChange($event)" name="title" [ngClass]="{'invalid-border':formSubmited() && model.length<3 || formSubmited() && model.length>255}"
+  >
+<span  [ngClass]="{
+    'valid':focused() && model.length >= 3,
+    'invalid':focused() &&  (formSubmited() && model.length<3) ||focused() &&  !formSubmited() && model.length<3
+  }">მინიმუმ 3 სიმბოლო</span>
+<span [ngClass]="{
+    'valid':focused() &&   model.length <=255,
+    'invalid':(formSubmited() && model.length >= 255) || !formSubmited() &&model.length >255 
+  }">მაქსიმუმ 255 სიმბოლო</span>

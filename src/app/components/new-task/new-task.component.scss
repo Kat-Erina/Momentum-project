@@ -17,19 +17,6 @@
             // border: 1px solid black;
             @include flex-container;
             gap:55px;
-            .title-container{
-            @include flex-container;
-            label{
-              @include label-styling
-            };
-            input{
-             @include input-styling;
-             outline: none
-            };
-            span{
-              @include span-styling
-            }
-            }
             .description-container{
                 @include flex-container;
                 label{

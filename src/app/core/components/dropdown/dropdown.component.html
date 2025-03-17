@@ -1,0 +1,25 @@
+<div class="priority">
+    <p class="label">{{label}}</p>
+    <div class="selected"> 
+          <div class="default-priority" (click)="toggleDropdown(dropDownTarget)">
+         <div> 
+            <img src="{{selectedOption()?.icon}}">
+            <p>{{selectedOption()?.name}}</p></div>
+             <i class="fa-solid" ></i></div>
+    @if(dropdownOpen()){
+        
+        <ul class="dropdown-options" >
+           @if(label==='პასუხისმგებელი თანამშრომელი*'){
+            <li>fjfjfjfjfadd</li>
+           }
+            @for(priority of data(); track priority.id){
+                <li (click)="selectOption(priority, dropDownTarget)" >
+                    <img src="{{priority?.icon}}">
+                    <span>{{ priority.name }}</span>
+                  </li>
+            }
+            
+          </ul>}
+    </div>
+</div> 
+

@@ -1,41 +1,26 @@
 <h1>შექმენი ახალი დავალება</h1>
 <div class="task-main-container">
-    <form [formGroup]="form" (submit)="handleSubmit()">
+    <form  (submit)="handleSubmit()">
         <div class="sub-container-one">
 <div class="title-container">
-    <label>სათაური*</label>
-<input type="text" formControlName="title" [ngClass]="{
-    'invalid-border': 
-      (formSubmited() && titleValidation?.invalid) ||
-      (!formSubmited() && titleValidation?.dirty&& (titleValidation?.value?.length < 2 || titleValidation?.value?.length > 255))
-  }">
-<span  [ngClass]="{
-    'valid': titleValidation?.dirty && titleValidation?.value.length >= 2,
-    'invalid': (formSubmited() && titleValidation?.invalid) || !formSubmited() && titleValidation?.dirty && titleValidation?.value.length < 2
-  }">მინიმუმ 3 სიმბოლო</span>
-<span [ngClass]="{
-    'valid': titleValidation?.dirty && titleValidation?.value.length <= 255 && titleValidation?.value.length>=2,
-    'invalid':(formSubmited() && titleValidation?.invalid) || !formSubmited() && titleValidation?.dirty && titleValidation?.value.length >255 
-  }">მაქსიმუმ 255 სიმბოლო</span>
-</div>
+    <app-input name="title" [formSubmited]="formSubmited" [labelValue]="'სათაური*'" [(model)]="title" (modelChange)="handleTitleValueChange($event)"></app-input>
+ </div>
+
 <div class="description-container">
     <label>აღწერა</label>
-<textarea formControlName="description" [ngClass]="{
-    'invalid-border': 
-      formSubmited() && description?.value.length>0 && (description?.value.length>255 || doesNotHaveEnoughWords) ||
-      (!formSubmited() && description?.dirty&& (doesNotHaveEnoughWords || description?.value?.length > 255))
-  }"></textarea>
+    <textarea [ngClass]="{'invalid-border':formSubmited()&& description().length>255 || formSubmited()&& description().length>0 && doesNotHaveEnoughWords()}" (ngModelChange)="handleTextAreaValueChange($event)" name="description" [(ngModel)]="description" ></textarea>
 <span [ngClass]="{
-    'valid': description?.dirty && !doesNotHaveEnoughWords,
-    'invalid': (formSubmited() && description?.value.length>0 && doesNotHaveEnoughWords) || !formSubmited() && description?.dirty && doesNotHaveEnoughWords
+    'valid': descriptionFocused() && !doesNotHaveEnoughWords(),
+    'invalid': (formSubmited() && description().length>0 && doesNotHaveEnoughWords()) || !formSubmited() && descriptionFocused() && doesNotHaveEnoughWords()
   }">მინიმუმ 4 სიტყვა</span>
 <span  [ngClass]="{
-    'valid': description?.dirty && description?.value.length <= 255 && description?.value.length>=2,
-    'invalid': (formSubmited() && description?.value.length >255) || !formSubmited() && description?.dirty && description?.value.length >255
+    'valid': descriptionFocused()&& description().length <= 255 ,
+    'invalid': (formSubmited() && description().length >255) || !formSubmited() && descriptionFocused() && description().length >255
   }">მაქსიმუმ 255 სიმბოლო</span>
-</div>
+</div> 
 <div class="priority-container">
-    <div class="priority">
+    <app-dropdown [label]="'პრიორიტეტი*'" [formSubmited]="formSubmited" [dropDownTarget]="'priorities'" [data]="priorities" [selectedOption]="selectedOption" (selectEmitter)="handleChange($event)" [dropdownOpen]="dropdownOpen"/>
+    <!-- <div class="priority">
         <p class="label">პრიორიტეტი*</p>
         <div class="selected"> 
               <div class="default-priority" (click)="toggleDropdown('priorities')" [ngClass]="{'invalid-border':formSubmited() && !selectedOption()}">
@@ -56,9 +41,10 @@
                 
               </ul>}
         </div>
-</div>
-<div class="status">
-    <p class="label">სტატუსი*</p>
+</div>  -->
+ <div class="status">
+    <app-dropdown [label]="'სტატუსი*'" [formSubmited]="formSubmited" [dropDownTarget]="'statuses'" [data]="statuses" [selectedOption]="selectedStatusOption" (selectEmitter)="handleChange($event)" [dropdownOpen]="dropdownOpenStatus"/>
+    <!-- <p class="label">სტატუსი*</p>
         <div class="selected"> 
             <div class="default-priority" (click)="toggleDropdown('statuses')" [ngClass]="{'invalid-border':formSubmited() && !selectedStatusOption()}">
                 <p>{{selectedStatusOption()?.name}}</p>
@@ -74,16 +60,17 @@
                 }
                 
               </ul>}
-        </div>
+        </div> -->
         
       
+</div> 
 </div>
-</div>
-        </div>
+        </div> 
 
 <div class="sub-container-two">
         <div class="department-container">
-            <p class="label">დეპარტამენტი*</p>
+            <app-dropdown [label]="'დეპარტამენტი*'" [formSubmited]="formSubmited" [dropDownTarget]="'departments'" [data]="departments" [selectedOption]="selectedDepartmentOption" (selectEmitter)="handleChange($event)" [dropdownOpen]="dropdownOpenDepartment"/>
+            <!-- <p class="label">დეპარტამენტი*</p>
             <div class="selected"> 
                 <div class="default-priority" (click)="toggleDropdown('departments')" [ngClass]="{'invalid-border':formSubmited() && !selectedDepartmentOption()}">
                     <p>{{selectedDepartmentOption()?.name}}</p>
@@ -96,10 +83,12 @@
                           </li>
                     }
                   </ul>}
-            </div>
+            </div> -->
         </div>
       <div class="employee-container">
-        
+        <app-dropdown [label]="'პასუხისმგებელი თანამშრომელი*'" [formSubmited]="formSubmited" [dropDownTarget]="'employees'" [data]="employees" [selectedOption]="selectedEmployee" (selectEmitter)="handleChange($event)" [dropdownOpen]="dropdownOpenEmployees"/>
+
+<!--         
         <p class="label">პასუხისმგებელი თანამშრომელი*</p>
         <div class="selected"> 
             <div class="default-priority" (click)="toggleDropdown('employees')" [ngClass]="{'invalid-border':formSubmited() && !selectedEmployee()}">
@@ -120,13 +109,13 @@
                       </li>
                 }
                 
-              </ul>}
-        </div>
+              </ul>
+            }
+        </div> -->
             </div>
             <div class="deadline">
                 <label>დედლაინი*</label>
                 <input type="date">
-                <!-- <app-calendar/> -->
             </div>
            <div class="btn-div">
             <button type="submit">დავალების შექმნა</button>

@@ -38,3 +38,14 @@ export interface Employee{
     avatar:string
 }
     
+export interface Task{
+    department:Department,
+description: string,
+due_date: string,
+employee: Employee,
+id:number,
+name:string,
+priority: Priority
+status:Status
+total_comments:number
+}

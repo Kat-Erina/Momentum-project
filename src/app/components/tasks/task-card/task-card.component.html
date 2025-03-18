@@ -1,0 +1,12 @@
+<div class="card-div">
+    <div class="heading">
+        <div class="status">
+            <div class="priority">
+                <img alt="'priority'" [src]="task.priority.icon">
+                <span>{{task.priority.name}}</span>
+            </div>
+            <div class="task-dep">{{task.department.name | shortenText }}</div>
+        </div>
+        <span class="date">{{ task.due_date| date: 'dd MMM, yyyy' }}</span>
+    </div>
+</div>

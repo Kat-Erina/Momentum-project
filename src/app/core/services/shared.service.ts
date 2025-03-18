@@ -1,5 +1,5 @@
 import { inject, Injectable, Signal, signal } from "@angular/core";
-import { Employee } from "../models/models";
+import { Department, Employee } from "../models/models";
 import { ApiService } from "./api.service";
 
 @Injectable({
@@ -10,6 +10,7 @@ employeeModalIsOpen=signal(false);
 employees=signal<Employee[]>([]);
 departmentId=signal<number|undefined>(0)
 apiService=inject(ApiService)
+departments=signal<Department[]>([])
 
 loadEmployees(){
     this.apiService.getEmployees().subscribe({
@@ -22,5 +23,7 @@ loadEmployees(){
         }
       })
 }
+
+loadDepartments(){}
 
 }

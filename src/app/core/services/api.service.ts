@@ -1,6 +1,6 @@
 import { HttpClient, HttpHandler, HttpHeaders } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { Department, Employee, Priority, Status } from "../models/models";
+import { Department, Employee, Priority, Status, Task } from "../models/models";
 
 @Injectable({
     'providedIn':'root'
@@ -13,7 +13,7 @@ private token="9e6a4b18-f1c6-49f5-b69c-916ce3da4ac1"
         const headers = new HttpHeaders({
             Authorization: `Bearer ${this.token}`,
           });
-return this.http.get(`${this.apiUrl}/tasks`, {headers})
+return this.http.get<Task[]>(`${this.apiUrl}/tasks`, {headers})
     }
 
     getStatuses(){   

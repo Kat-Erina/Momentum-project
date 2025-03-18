@@ -10,7 +10,7 @@
     @if(dropdownOpen()){
         <ul [ngClass]="customclass" >
            @if(label==='პასუხისმგებელი თანამშრომელი*'){
-            <li class="add-empl"><span>+</span> დაამატე თანამშრომელი</li>
+            <li class="add-empl" (click)="service.employeeModalIsOpen.set(true)"><span>+</span> დაამატე თანამშრომელი</li>
            }
             @for(priority of data(); track priority.id){
                 <li (click)="selectOption(priority, dropDownTarget)" >

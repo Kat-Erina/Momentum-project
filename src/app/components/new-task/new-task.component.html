@@ -3,7 +3,7 @@
     <form  (submit)="handleSubmit()">
         <div class="sub-container-one">
 <div class="title-container">
-    <app-input name="title" [formSubmited]="formSubmited" [labelValue]="'სათაური*'" [(model)]="title" (modelChange)="handleTitleValueChange($event)"></app-input>
+    <app-input name="title" [formSubmited]="formSubmited" [isMinimumLengthValid]="isTitleLengthValid" [isMaximumLengthValid]="isTitleMaximumLengthValid" [labelValue]="'სათაური*'" [(model)]="title" (modelChange)="handleTitleValueChange($event)" [minimumChar]="'მინიმუმ 3 სიმბოლო'" [maximumChar]="'მაქსიმუმ 255 სიმბოლო'"></app-input>
  </div>
 
 <div class="description-container">

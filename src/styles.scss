@@ -1,4 +1,23 @@
 @import './styles/mixins.scss';
+
+@font-face {
+  font-family: 'FiraGO';
+  src: url('/src/assets/fonts/FiraGO-TwoItalic.woff2') format('woff2'),
+       url('/src/assets/fonts/FiraGO-TwoItalic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// @font-face {
+//   font-family: 'FiraGO';
+//   src: url('/src/assets/fonts/FiraGO-UltraLightItalic.woff2') format('woff2'),
+//        url('/src/assets/fonts/FiraGO-UltraLightItalic.woff') format('woff');
+//   font-weight: bold;
+//   font-style: normal;
+// }
+body {
+  font-family: 'FiraGO'!important
+}
 *{
  margin: 0;
  padding: 0;
@@ -6,9 +25,32 @@
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; 
+body { margin: 0; 
+  // font-family: Roboto, "Helvetica Neue", sans-serif; 
  
 }
 .invalid-border{
   border: 1px solid #FA4D4D !important;
   }
+  .custom-class{
+    width:100% !important;
+    list-style: none;
+    background-color: white;
+    border-radius: 5px;
+    li{
+        @include flex-row;
+        gap: 6px;
+       align-items: center;
+       @include li-styling
+
+    }
+  }
+
+  .valid{
+    color: #08A508 !important;
+    }
+    
+    .invalid{
+        color: #FA4D4D!important
+    }
+  

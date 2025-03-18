@@ -30,4 +30,11 @@ export interface Data{
     status:Status,
     employee:Employee
 }    
+
+export interface Employee{
+    name:string, 
+    surname:string, 
+    department_id:number,
+    avatar:string
+}
     

@@ -6,6 +6,7 @@ import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Data } from '@angular/router';
 import { InputComponent } from "../../core/components/input/input.component";
 import { DropdownComponent } from "../../core/components/dropdown/dropdown.component";
+import { SharedService } from '../../core/services/shared.service';
 
 @Component({
   selector: 'app-new-task',
@@ -16,9 +17,11 @@ import { DropdownComponent } from "../../core/components/dropdown/dropdown.compo
 })
 export class NewTaskComponent implements OnInit {
   apiService=inject(ApiService);
+  service=inject(SharedService);
   title:string="";
   description:string=" ";
-  descriptionFocused=signal<boolean>(false)
+  descriptionFocused=signal<boolean>(false);
+  departmentId=this.service.departmentId
 
   handleTitleValueChange(value: string) {
     console.log(value)
@@ -26,6 +29,13 @@ export class NewTaskComponent implements OnInit {
 
   }
 
+  get isTitleLengthValid(): boolean {
+    return this.title.length >= 3;
+  }
+
+  get isTitleMaximumLengthValid(): boolean {
+    return this.title.length<=255;
+  }
 
   doesNotHaveEnoughWords=signal(true);
   checkWordCount(value:string) {
@@ -58,7 +68,7 @@ this.updateFieldData('description', value,)
   dropdownOpenDepartment = signal(false);
   selectedDepartmentOption=signal<Department|null>(null);
 
-  employees=signal<Employee[]>([])
+  employees=this.service.employees
   dropdownOpenEmployees = signal(false);
   selectedEmployee=signal<Employee|null>(null);
 
@@ -96,17 +106,10 @@ this.updateFieldData('description', value,)
   }
   if(chosenField==="departments"){
     this.selectedDepartmentOption.set(option);
+    this.departmentId.set(this.selectedDepartmentOption()?.id)
   this.dropdownOpenDepartment.set(false);
   this.updateFieldData('department', this.selectedDepartmentOption())
-  this.apiService.getEmployees().subscribe({
-    next:(response)=>{
-    let data=response.filter(empl=>{
-        return empl.department.id===this.selectedDepartmentOption()?.id
-      });
-this.employees.set(data)
-console.log(data)
-    }
-  })
+this.service.loadEmployees()
 this.selectedEmployee.set(null);
   }
   if(chosenField==="employees"){
@@ -162,17 +165,8 @@ this.loadStatuses()
 this.loadDepartments();
 
 if(this.selectedDepartmentOption()){
-  this.apiService.getEmployees().subscribe({
-    next:(response)=>{
-    let data=response.filter(empl=>{
-        return empl.department.id===this.selectedDepartmentOption()?.id 
-      });
-this.employees.set(data)
-console.log(data)
-    }
-  })
-}
-  }
+ this.service.loadEmployees()
+  }}
  
   
   toggleDropdownFn(option:string) {

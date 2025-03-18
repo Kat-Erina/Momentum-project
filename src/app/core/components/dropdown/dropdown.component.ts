@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, signal, Signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal, Signal } from '@angular/core';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-dropdown',
@@ -9,6 +10,9 @@ import { Component, EventEmitter, Input, Output, signal, Signal } from '@angular
   styleUrl: './dropdown.component.scss'
 })
 export class DropdownComponent {
+
+service=inject(SharedService) 
+
 @Input() label!:string
 @Input() formSubmited!:Signal<boolean>
 @Input() dropDownTarget!:string

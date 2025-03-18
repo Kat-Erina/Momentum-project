@@ -40,5 +40,12 @@ return this.http.get<Status[]>(`${this.apiUrl}/statuses`)
           });
         return this.http.post<any[]>(`${this.apiUrl}/tasks`, data,{headers})
      }
+
+     addEmployee(data:any){
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${this.token}`,
+          });
+        return this.http.post<Employee>(`${this.apiUrl}/employees`, data,{headers})
+     }
 }
 

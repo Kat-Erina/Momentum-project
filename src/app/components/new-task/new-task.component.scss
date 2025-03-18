@@ -1,21 +1,23 @@
 @import './../../../styles/mixins.scss';
 h1{
+    font-size: 34px;
+    font-weight: 600;
     margin-left: 120px;
     margin-right: 120px;
+    color: #212529
 }
 .task-main-container{
     margin-left: 120px;
     width:1684px;
     background-color: #DDD2FF;
     margin-top: 30px;
-    height: 9;
     min-height: 750px;
-    padding: 0 120px;
+    padding-top: 65px;
+    padding-left: 55px;
+
     form{
         @include flex-row;
-        gap:70px;
-        padding-top: 65px;
-        padding-left: 55px;
+        gap:55px;
         .sub-container-one{
             width:550px;
             @include flex-container;
@@ -74,11 +76,5 @@ h1{
     }
 }
 
-.valid{
-color: #08A508 !important;
-}
 
-.invalid{
-    color: #FA4D4D!important
-}
 

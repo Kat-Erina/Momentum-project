@@ -14,17 +14,20 @@ export class InputComponent  {
 @Input() labelValue!:string
 @Input() model=" ";
 @Output() modelChange  = new EventEmitter<string>(); 
+@Input() minimumChar="";
+@Input() maximumChar="";
 
+@Input() isMinimumLengthValid!: boolean
+@Input() isMaximumLengthValid!: boolean
 
 
 focused=signal(false)
 onInputChange(value: string) {
   this.focused.set(true)
   this.modelChange.emit(value); 
+  console.log(this.formSubmited())
 }
 
-ngOnInit(){
-  console.log(this.model)
-}
+
 
 }

@@ -38,11 +38,44 @@ i{
 }
    }
 }
+.chosen-filters{
+border: 1px solid red;
+margin-top:30px;
+@include flex-row;
+list-style: none;
+gap:8px;
+li{
+   padding: 6px 10px;
+   text-align: center; 
+   border: 1px solid #CED4DA;
+   @include flex-row;
+   align-items: center;
+   justify-content: center;
+   gap:4px;
+   font-size: 14px;
+   font-weight: 400;
+   border-radius: 43px;
+   font-family: 'FiraGo';
+   color: #343A40;
+   i{
+    color: #343A40
+   }
+}
+button{
+border: none;
+outline: none;
+padding: 6px 10px;
+font-size: 14px;
+font-weight: 400;
+background-color: white;
+font-family: 'FiraGo';
+}
+}
 .tasks-main-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 70px;
+    margin-top: 30px;
   .to-be-started-tasks-cnt, .in-progres-tasks-cnt, .ready-for-testing-tasks-cnt, .finished-tasks-container{
     @include flex-container;
     width:381px;

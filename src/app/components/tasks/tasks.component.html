@@ -1,12 +1,18 @@
 <main>
     <h1>დავალებების გვერდი</h1>
 <ul class="filtering-criterias">
-<li (click)="opendropdown('departments')">დეპარტამენტი <i class="fa-solid" [ngClass]="departmentIsOpen()?' fa-angle-up':'fa-angle-down'"></i></li>
-<li (click)="opendropdown('priorities')">პრიორიტეტი <i class="fa-solid" [ngClass]="priorityIsOpen()?' fa-angle-up':'fa-angle-down'"></i></li>
-<li (click)="opendropdown('employees')">თანამშრომელი <i class="fa-solid" [ngClass]="employyesAreOpen()?' fa-angle-up':'fa-angle-down'"></i></li>
+<li (click)="opendropdown('departments')">დეპარტამენტი <i class="fa-solid" [ngClass]="filtersService.departmentIsOpen()?' fa-angle-up':'fa-angle-down'"></i></li>
+<li (click)="opendropdown('priorities')">პრიორიტეტი <i class="fa-solid" [ngClass]="filtersService.priorityIsOpen()?' fa-angle-up':'fa-angle-down'"></i></li>
+<li (click)="opendropdown('employees')">თანამშრომელი <i class="fa-solid" [ngClass]="filtersService.employyesAreOpen()?' fa-angle-up':'fa-angle-down'"></i></li>
 </ul>
 @if(this.service.filtersDropdownOpen())
-{<app-filters-dropdown [data]="data" ></app-filters-dropdown>}
+{<app-filters-dropdown [data]="data" [target]="target()"></app-filters-dropdown>}
+<ul class="chosen-filters">
+ @for(item of filtersService.array();track item?.id){
+    <li>{{item?.name}} <i class="fa-solid fa-xmark"></i></li>
+ }   
+    <button>გასუფთავება</button>
+</ul>
 <div class="tasks-main-container">
     <div class="to-be-started-tasks-cnt" >
        <app-status [status]="'დასაწყები'" [color]="'#F7BC30'"></app-status>

@@ -2,7 +2,7 @@
     <ul>
 @for(item of data(); track item.id){
     <li>  
-        <input type="checkbox"  [id]="'checkbox' + item.id" [(ngModel)]="item.status"  [value]="item.id"
+        <input type="checkbox"  [id]="'checkbox' + item.id" [(ngModel)]="item.mj"  [value]="item.id"
         (change)="getValue($event)">
       @if(item.surname) {<label [for]="'checkbox' + item.id">
         <img [src]="item.avatar">
@@ -12,5 +12,5 @@
     </li>
 }
     </ul>
-<div class="btn-div"><button (click)="choose()">არჩევა</button></div>
+<div class="btn-div"><button (click)="filter()">არჩევა</button></div>
 </div>

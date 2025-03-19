@@ -49,3 +49,10 @@ priority: Priority
 status:Status
 total_comments:number
 }
+
+export interface FilteresObj{
+        priorities: Priority[]; 
+        departments: Department[]; 
+        employees: Employee[];
+    
+}

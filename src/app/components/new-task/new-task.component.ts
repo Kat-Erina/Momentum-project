@@ -3,7 +3,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
 import { Department, Employee, Priority, Status } from '../../core/models/models';
 import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Data } from '@angular/router';
+import { Data, Router } from '@angular/router';
 import { InputComponent } from "../../core/components/input/input.component";
 import { DropdownComponent } from "../../core/components/dropdown/dropdown.component";
 import { SharedService } from '../../core/services/shared.service';
@@ -16,6 +16,7 @@ import { SharedService } from '../../core/services/shared.service';
   styleUrl: './new-task.component.scss'
 })
 export class NewTaskComponent implements OnInit {
+  router=inject(Router)
   apiService=inject(ApiService);
   service=inject(SharedService);
   title:string="";
@@ -216,14 +217,14 @@ if(this.selectedOption() && this.selectedStatusOption() && this.selectedDepartme
   priority_id: this.selectedOption()?.id
                   }
                   console.log(data)
-// this.apiService.handleTaskSubmission(data).subscribe({
-//   next:(response)=>{
-//     if(response)
-//     localStorage.removeItem('taskData');
-//   }
-// })} 
-    }
-    else console.log('invalid data')
+this.apiService.handleTaskSubmission(data).subscribe({
+  next:(response)=>{
+    if(response)
+    localStorage.removeItem('taskData');
+    this.router.navigate(['']);
+  }
+})} 
+    
 
 }
 }

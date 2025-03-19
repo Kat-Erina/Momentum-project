@@ -1,0 +1,16 @@
+<div class="filters-dropdown">
+    <ul>
+@for(item of data(); track item.id){
+    <li>  
+        <input type="checkbox"  [id]="'checkbox' + item.id" [(ngModel)]="item.status"  [value]="item.id"
+        (change)="getValue($event)">
+      @if(item.surname) {<label [for]="'checkbox' + item.id">
+        <img [src]="item.avatar">
+        <span>{{item.name}} {{item.surname}}</span>
+      </label>} 
+      @else  {<label [for]="'checkbox' + item.id">{{item.name}} </label>} 
+    </li>
+}
+    </ul>
+<div class="btn-div"><button (click)="choose()">არჩევა</button></div>
+</div>

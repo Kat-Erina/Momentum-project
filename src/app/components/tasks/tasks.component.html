@@ -1,38 +1,56 @@
 <main>
     <h1>დავალებების გვერდი</h1>
 <ul class="filtering-criterias">
-<li>დეპარტამენტი <i class="fa-solid fa-angle-down"></i></li>
-<li>პრიორიტეტი <i class="fa-solid fa-angle-down"></i></li>
-<li>თანამშრომელი <i class="fa-solid fa-angle-down"></i></li>
+<li (click)="opendropdown('departments')">დეპარტამენტი <i class="fa-solid" [ngClass]="departmentIsOpen()?' fa-angle-up':'fa-angle-down'"></i></li>
+<li (click)="opendropdown('priorities')">პრიორიტეტი <i class="fa-solid" [ngClass]="priorityIsOpen()?' fa-angle-up':'fa-angle-down'"></i></li>
+<li (click)="opendropdown('employees')">თანამშრომელი <i class="fa-solid" [ngClass]="employyesAreOpen()?' fa-angle-up':'fa-angle-down'"></i></li>
 </ul>
-<!-- <div class="chosen-filters">
-    <ul>
-<li>   <input type="checkbox" id="checkbox1">
-    <label for="checkbox1">Option 1</label></li>
-    </ul>
-<div class="btn-div"><button>არჩევა</button></div>
-</div> -->
-
+@if(this.service.filtersDropdownOpen())
+{<app-filters-dropdown [data]="data" ></app-filters-dropdown>}
 <div class="tasks-main-container">
-    <div class="to-be-started-tasks-cnt">
+    <div class="to-be-started-tasks-cnt" >
        <app-status [status]="'დასაწყები'" [color]="'#F7BC30'"></app-status>
        <ul>
-        @for(task of tasks();track task.id){
+        @for(task of service.aboutToStartTsks();track task.id){
             <li>
-                <app-task-card [task]="task"></app-task-card>
+                <app-task-card  [color]="'yellow-border'" [task]="task"></app-task-card>
             </li>
         }
         
        </ul>
     </div>
-    <div class="in-progres-tasks-cnt">
+    <div class="in-progres-tasks-cnt"  >
         <app-status [status]="'პროგრესში'" [color]="'#FB5607'"></app-status>
+        <ul>
+            @for(task of service.inProgressTsks();track task.id){
+                <li>
+                    <app-task-card  [color]="'orange-border'" [task]="task"></app-task-card>
+                </li>
+            }
+            
+           </ul>
     </div>
-    <div class="ready-for-testing-tasks-cnt">
+    <div class="ready-for-testing-tasks-cnt" >
         <app-status [status]="'მზად ტესტირებისთვის'" [color]="'#FF006E'"></app-status>
+        <ul>
+            @for(task of service.readyForTestingTasks();track task.id){
+                <li>
+                    <app-task-card  [color]="'pink-border'" [task]="task"></app-task-card>
+                </li>
+            }
+            
+           </ul>
     </div>
-    <div class="finished-tasks-container">
+    <div class="finished-tasks-container" >
         <app-status [status]="'დასრულებული'" [color]="'#3A86FF'"></app-status>
+        <ul>
+            @for(task of service.finishedTasks();track task.id){
+                <li>
+                    <app-task-card  [color]="'blue-border'" [task]="task"></app-task-card>
+                </li>
+            }
+            
+           </ul>
     </div>
 </div>
 </main>

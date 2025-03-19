@@ -2,23 +2,21 @@
 
 .card-div{
 background-color: white;
-border: 1px solid #F7BC30;
 padding: 20px;
 border-radius: 15px;
+gap:28px;
+@include flex-container;
 .heading{
    @include flex-row;
    justify-content: space-between;
-   border: 1px solid darkred;
    text-align: center;
 .status{
     @include flex-row;
     justify-content: space-between;
-    border: 1px solid darkred;
     align-items: center;
     text-align: center;
     gap:10px;
     .priority{
-        border: 0.5px solid darkred;
         display: flex;
         gap:4px;
         border-radius: 4px;
@@ -30,22 +28,71 @@ border-radius: 15px;
     }
     .task-dep{
 text-align: center;
-border: 1px solid darkred;
 padding: 5px 9px;
-border-radius: 15px;
-font-size: 12px;
 font-weight: 400;
 height: 100%;
+align-items: center;
+display: flex;
+border-radius: 15px;
+p{font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+color: white}
     }
 }
 .date{
     text-align: center;
     display: flex;
     align-items: center;
-    border: 1px solid darkred;
     font-size: 12px;
     font-weight: 400;
     color: #212529
 }
 }
+.desc-container{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    .desc-heading{
+        height: auto;   /* Allow height to expand if needed */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  font-size: 15px;
+  font-weight: bold !important;
+  color: #212529;
+  text-align: center;
+    }.desc-text{
+        font-size: 14px;
+        color: #212529;
+        font-weight: 400;
+    }
 }
+.icons-container{
+    @include flex-row;
+    height: 31px;
+    justify-content: space-between;
+    align-items: center;
+    img{
+        width:31px;
+        height: 31px;
+        border-radius: 50%
+    }
+    .comments-icons{
+        @include flex-row;
+        gap:4px;
+        height: 100%;
+        align-items: center;
+        color: #212529;
+        .fa-message{
+            font-size: 20px;
+        }
+        span{
+            font-size: 14px;
+            font-weight: 400;
+        }
+       
+    }
+}
+}
+

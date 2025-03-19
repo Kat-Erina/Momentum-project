@@ -1,7 +1,10 @@
-main{background-color: bisque;
-height: 100vh;
+@import './../../../styles/mixins.scss';
+
+main{
 padding: 0 120px;
 font-family: 'FiraGo';
+padding-bottom: 120px;
+
 h1{
     font-size: 34px; 
 }
@@ -11,7 +14,7 @@ h1{
 .filtering-criterias{
     width: 688px;
     margin-top: 45px;
-    margin-bottom: 45px;
+    // margin-bottom: 45px;
     list-style: none;
     display: flex;
     flex-direction: row;
@@ -35,47 +38,20 @@ i{
 }
    }
 }
-
-.chosen-filters{
-    width:688px;
-    margin-top: 10px;
-    border:1px solid #8338EC;
-    border-radius: 10px;
-    padding:40px 30px 20px;
-    ul{
-        list-style: none;
-    }
-    .btn-div{
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 20px;
-       
-        button{
-        
-            width:155px;
-            height: 35px;
-            background-color: #8338EC;
-            border-radius: 20px;
-            border: none;
-            color: white;
-            letter-spacing: 1px;
-            font-size: 16px;
-            float: right;
-    
-        }
-    }
- 
-}
 .tasks-main-container{
-    border: 1px solid black;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-top: 70px;
   .to-be-started-tasks-cnt, .in-progres-tasks-cnt, .ready-for-testing-tasks-cnt, .finished-tasks-container{
+    @include flex-container;
     width:381px;
-    border: 1px solid black;
-    background-color: blue;
-    gap:30px;
+    gap:30px ;
+ul{
+    list-style: none;
+    @include flex-container;
+    gap:30px ;
+}
 
 
   }

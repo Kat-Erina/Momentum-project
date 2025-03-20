@@ -1,4 +1,4 @@
-import { Component,  inject, Input, Signal, WritableSignal } from '@angular/core';
+import { Component,  inject, Input, OnInit, Signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FilterService } from '../../../core/services/filter-service.service';
@@ -15,7 +15,7 @@ export class FiltersDropdownComponent  {
   filtersService=inject(FilterService)
   sharedService=inject(SharedService)
   @Input() data!: Signal<any[]>;
-  @Input() target!:string
+  @Input() target!:string;
 
 
 addCriteria(criteria: string, criteriasArray:WritableSignal<any[]>) {
@@ -72,6 +72,7 @@ this.filtersService.fileteringCriterias.update(
 }
 
 filter(){
+  console.log(this.filtersService.fileteringCriterias())
   this.filtersService.filter(this.sharedService.aboutToStartTsks,this.filtersService.fileteringCriterias);
   this.filtersService.filter(this.sharedService.inProgressTsks,this.filtersService.fileteringCriterias)
   this.filtersService.filter(this.sharedService.readyForTestingTasks,this.filtersService.fileteringCriterias)
@@ -81,19 +82,18 @@ filter(){
   if(this.target==='departments'){
     this.filtersService.departmentIsOpen.set(false);
     this.filtersService.addUniqueItems(this.filtersService.fileteringCriterias().departments);
+    console.log(this.filtersService.fileteringCriterias())
   }
   if(this.target==='priorities'){
     this.filtersService.priorityIsOpen.set(false);
     this.filtersService.addUniqueItems(this.filtersService.fileteringCriterias().priorities);
+    console.log(this.filtersService.fileteringCriterias())
   }
   if(this.target==='employees'){
     this.filtersService.employyesAreOpen.set(false);
-    this.filtersService.array.set(
-      [...new Map(
-        [...this.filtersService.array(), ...this.filtersService.fileteringCriterias().employees]
-          .map(item => [item?.id, item]) 
-      ).values()]
-    );
+    this.filtersService.addUniqueItems(this.filtersService.fileteringCriterias().employees);
+    console.log(this.filtersService.fileteringCriterias())
+
   }
  }
   }

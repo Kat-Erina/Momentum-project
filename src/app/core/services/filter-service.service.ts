@@ -1,13 +1,15 @@
-import { computed, inject, Injectable, signal, WritableSignal } from "@angular/core";
+import { computed, inject, Injectable, OnInit, signal, WritableSignal } from "@angular/core";
 import { Department, Employee, FilteresObj, Priority, Task } from "../models/models";
 import { SharedService } from "./shared.service";
+import { ApiService } from "./api.service";
 
 @Injectable({
     'providedIn':'root'
 })
-export class FilterService{
+export class FilterService {
 sharedService=inject(SharedService)
 departmentsFiltersCriterias=signal<Department[]>([]);
+apiService=inject(ApiService)
 
 prioritiesFiltersCriterias=signal<Priority[]>([]);
 employeesFiltersCriterias=signal<Employee[]>([]);
@@ -24,7 +26,6 @@ addUniqueItems(newItems: (Priority | Department |Employee)[]) {
           existingItem?.id === newItem.id && existingItem.name === newItem.name
         )
       );
-      console.log([...currentArray, ...uniqueItems])
       return [...currentArray, ...uniqueItems];
     });
   }
@@ -44,7 +45,10 @@ let updatedInfo=array().filter(task=>
   (obj().priorities.length === 0 || obj().priorities.some(pri => pri.id === task.priority.id))
       )
       array.set(updatedInfo)
-      console.log(array())
+localStorage.setItem('filters', JSON.stringify(this.fileteringCriterias()))
+
 }
+
+
 
 }

@@ -9,9 +9,11 @@
 {<app-filters-dropdown [data]="data" [target]="target()"></app-filters-dropdown>}
 <ul class="chosen-filters">
  @for(item of filtersService.array();track item?.id){
-    <li>{{item?.name}} <i class="fa-solid fa-xmark"></i></li>
+    <li><app-filter-criteria [item]="item"><i class="fa-solid fa-xmark"></i></app-filter-criteria></li>
  }   
-    <button>გასუფთავება</button>
+    @if(filtersService.array().length!=0){
+        <button (click)="clearfilters()">გასუფთავება</button>
+    }
 </ul>
 <div class="tasks-main-container">
     <div class="to-be-started-tasks-cnt" >

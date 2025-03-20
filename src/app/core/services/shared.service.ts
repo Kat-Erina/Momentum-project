@@ -16,6 +16,8 @@ filtersDropdownOpen=signal(false)
 allEmployees=signal<Employee[]>([])
 priorities=signal<Priority[]>([])
 data=signal<any[]>([]);
+allTasks=signal<Task[]>([])
+storedTasks=signal<Task[]>([])
 
 
 aboutToStartTsks=signal<Task[]>([]);

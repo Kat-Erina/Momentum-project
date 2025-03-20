@@ -1,4 +1,4 @@
-import { HttpClient, HttpHandler, HttpHeaders } from "@angular/common/http";
+import { HttpClient,  HttpHeaders } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Department, Employee, Priority, Status, Task } from "../models/models";
 
@@ -47,5 +47,6 @@ return this.http.get<Status[]>(`${this.apiUrl}/statuses`)
           });
         return this.http.post<Employee>(`${this.apiUrl}/employees`, data,{headers})
      }
+
 }
 

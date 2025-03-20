@@ -1,1 +1,4 @@
-<p>filter-criteria works!</p>
+@if(item.surname){
+    <p (click)="click(item)">{{item.name}} {{item.surname}} <i class="fa-solid fa-xmark"></i></p>
+}
+@else  {<p (click)="click(item)">{{item.name}} {{item.surname}} <i class="fa-solid fa-xmark"></i></p>} 

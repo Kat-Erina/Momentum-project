@@ -13,7 +13,7 @@
     </div>
     <div class="desc-container">
         <p class="desc-heading">{{task.name}}</p>
-        <p class="desc-text">{{task.description}}</p>
+        <p class="desc-text">{{task.description | modifyLength}}</p>
     </div>
     <div class="icons-container">
         <img [src]="task.employee.avatar" alt="employee-photo">

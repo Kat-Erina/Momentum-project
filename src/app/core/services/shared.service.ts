@@ -28,7 +28,9 @@ finishedTasks=signal<Task[]>([])
 
 
 
+
 loadEmployees(){
+  console.log(this.departmentId())
   let sbsc=this.apiService.getEmployees().subscribe({
         next:(response)=>{
         let data=response.filter(empl=>{

@@ -56,3 +56,21 @@ export interface FilteresObj{
         employees: Employee[];
     
 }
+
+export interface SubComment{
+    author_avatar: string
+    author_nickname:string
+    id:number 
+    parent_id: null | number
+    task_id:number
+    text:string 
+}
+export interface Comment {
+author_avatar: string
+author_nickname:string
+id:number 
+parent_id: null | number
+sub_comments:SubComment[]
+task_id:number
+text:string
+}

@@ -1,6 +1,6 @@
 import { HttpClient,  HttpHeaders } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { Department, Employee, Priority, Status, Task } from "../models/models";
+import { Comment, Department, Employee, Priority, Status, Task } from "../models/models";
 
 @Injectable({
     'providedIn':'root'
@@ -47,6 +47,39 @@ return this.http.get<Status[]>(`${this.apiUrl}/statuses`)
           });
         return this.http.post<Employee>(`${this.apiUrl}/employees`, data,{headers})
      }
+
+     getTask(id:number){
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${this.token}`,
+      });
+
+      return this.http.get<Task>(`${this.apiUrl}/tasks/${id}`,{headers})
+     }
+
+     updateTaskStatus(id:number, data:{status_id:number|undefined}){
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${this.token}`,
+      });
+
+      return this.http.put<Task>(`${this.apiUrl}/tasks/${id}`,data,{headers})
+     }
+
+     getTaskComments(id:number){
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${this.token}`,
+      });
+
+      return this.http.get<Comment[]>(`${this.apiUrl}/tasks/${id}/comments`,{headers})
+     }
+
+     addComment(id:number, value:{'text':string} | {'text':string, 'parent_id':number}){
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${this.token}`,
+      });
+      return this.http.post<any>(`${this.apiUrl}/tasks/${id}/comments`,value, {headers})
+     }
+
+     
 
 }
 

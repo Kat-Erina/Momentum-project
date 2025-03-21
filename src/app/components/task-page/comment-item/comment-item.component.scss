@@ -1,0 +1,40 @@
+@import '../../../../styles/mixins.scss';
+.comment-item{
+    @include flex-row;
+    gap:12px;
+    width:598px;
+    img{
+        border-radius: 40px;
+        height:38px;
+        width:38px
+    }
+    .comment-content{
+        gap:10px;
+        @include flex-container;
+        .comment-author{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .comment-text{
+            line-height: 20px;
+            font-size: 18px;
+            font-weight: lighter;
+        }
+        .reply{
+            @include flex-row;
+            align-items: center;
+            gap:6px;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            img{
+                width:16px;
+                height: 16px;
+            }
+            span{
+                font-size: 12px;
+                font-weight: 400;
+            }
+        }
+    }
+}

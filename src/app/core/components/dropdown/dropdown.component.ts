@@ -13,9 +13,11 @@ export class DropdownComponent {
 
 service=inject(SharedService) 
 
-@Input() label!:string
+@Input() label?:string
 @Input() formSubmited!:Signal<boolean>
+
 @Input() dropDownTarget!:string
+
 @Input() data!:Signal<any[]>
 @Input() selectedOption!:Signal<any>
 @Input() dropdownOpen=signal(false);

@@ -21,7 +21,7 @@
        <ul>
         @for(task of service.aboutToStartTsks();track task.id){
             <li>
-                <app-task-card  [color]="'yellow-border'" [task]="task"></app-task-card>
+                <app-task-card (idEmitter)="navigateToTask($event)"  [color]="'yellow-border'" [task]="task"></app-task-card>
             </li>
         }
         
@@ -32,7 +32,7 @@
         <ul>
             @for(task of service.inProgressTsks();track task.id){
                 <li>
-                    <app-task-card  [color]="'orange-border'" [task]="task"></app-task-card>
+                    <app-task-card (idEmitter)="navigateToTask($event)" [color]="'orange-border'" [task]="task"></app-task-card>
                 </li>
             }
             
@@ -43,7 +43,7 @@
         <ul>
             @for(task of service.readyForTestingTasks();track task.id){
                 <li>
-                    <app-task-card  [color]="'pink-border'" [task]="task"></app-task-card>
+                    <app-task-card (idEmitter)="navigateToTask($event)" [color]="'pink-border'" [task]="task"></app-task-card>
                 </li>
             }
             
@@ -54,7 +54,7 @@
         <ul>
             @for(task of service.finishedTasks();track task.id){
                 <li>
-                    <app-task-card  [color]="'blue-border'" [task]="task"></app-task-card>
+                    <app-task-card (idEmitter)="navigateToTask($event)" [color]="'blue-border'" [task]="task"></app-task-card>
                 </li>
             }
             

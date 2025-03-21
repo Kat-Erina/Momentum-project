@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Task } from '../../../core/models/models';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ShortenTextPipe } from '../../../pipes/shorten-text.pipe';
 import { ModifyLengthPipe } from '../../../pipes/modify-length.pipe';
+import { StylingService } from '../../../core/services/styling.service';
 
 @Component({
   selector: 'app-task-card',
@@ -14,28 +15,14 @@ import { ModifyLengthPipe } from '../../../pipes/modify-length.pipe';
 export class TaskCardComponent {
 @Input() task!:Task;
 @Input() color!:string;
+@Output() idEmitter=new EventEmitter<number>()
 
-getDepartmentClass(departmentName: string): string {
-  const departmentColors: { [key: string]: string } = {
-  'ადმინისტრაციის დეპარტამენტი': 'bgc-pink',
-      'ფინანსების დეპარტამენტი': 'bgc-blue',
-      'გაყიდვები და მარკეტინგის დეპარტამენტი': 'bgc-pink',
-      "ადამიანური რესურსების დეპარტამენტი":'bgc-pink',
-      "ლოჯოსტიკის დეპარტამენტი":"bgc-blue",
-      "ტექნოლოგიების დეპარტამენტი":"bgc-yellow",
-"მედიის დეპარტამენტი":'bgc-orange',
-  };
+stylingService=inject(StylingService)
 
-  return departmentColors[departmentName];
+idEmitterFn(){
+  this.idEmitter.emit(this.task.id)
 }
 
-getPriorityClass(priorityName: string): string {
-  const prioritycolors: { [key: string]: string } = {
-  'დაბალი': 'green-font',
-      'მაღალი': 'red-font',
-      'საშუალო': 'yellow-font',
-  };
 
-  return prioritycolors[priorityName];
-}
+
 }

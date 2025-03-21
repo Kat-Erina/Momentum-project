@@ -1,0 +1,241 @@
+@import './../../../styles/mixins.scss';
+
+.task-main-container{
+    padding: 0px 120px;
+    @include flex-row;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+
+    .task-fulldetails-container{
+        width:715px;
+        @include flex-container;
+        gap:40px;
+        .task-desc-container{
+            @include flex-container;
+            gap:12px;
+            padding: 10px 0;
+            .status{
+                @include flex-row;
+                align-items: center;
+                gap:18px;
+                
+                p{
+                    font-size: 16px;
+                    font-weight: 500px;
+                    padding: 5px 10px;
+                    border-radius: 15px;
+                    color: white
+                }
+                .priority{
+                    padding: 4px 5px;
+                    border-radius: 3px;
+                    gap:4px;
+                    align-items: center;
+                    display: flex;
+                  
+                   
+                }
+            }
+            h1{
+                color: #212529;
+                font-size: 34px;
+                font-weight: 600;
+            }
+            .task-description{
+                margin-top: 20px;
+                line-height: 20px;
+                font-size: 18px
+            }
+        }
+        .task-details{
+            width:493px;
+            height: 277px;
+            padding: 10px 0;
+            @include flex-container;
+            gap:18px;
+            .heading{
+               font-size: 24px;
+               font-weight: bold;
+            color: #2A2A2A          }
+            .task-status-details{
+                @include flex-row;
+                gap: 70px !important;
+                justify-content: space-between;
+            
+                .select-status{
+                    width:259px;
+                    border: 1px solid #CED4DA;
+                    border-radius: 5px;
+                    padding: 14px;
+                    .default-status{
+                        p{
+                        @include flex-row;
+                        gap: 10px !important;
+                        align-items: center;
+                        justify-content: space-between;
+                    font-size: 14px;
+                font-weight: 300;
+            color: #0D0F10}
+                    }
+                    ul{
+                        position: absolute;
+                        z-index: 0;
+                        background-color: white;
+                        list-style: none;
+                        margin-top: 15px;
+                        width:220px;
+                        margin-left: -15px;
+                        @include flex-container;
+                        li{
+                            border-radius: 5px;
+                            padding: 10px;
+                            padding-left: 14px;
+                            border: 1px solid #CED4DA;
+                            font-size: 14px;
+                        font-weight: 300;
+                    color: #0D0F10
+                        }
+                    }
+                }
+            }
+            .task-deadline-details,.task-empl-details{
+                @include flex-row;
+                align-items: center;
+                gap: 70px !important;
+                justify-content: space-between;
+            }
+            .task-empl-details{
+                .empl-container{
+                    @include flex-row;
+                    gap:12px;
+                    justify-content: space-between;
+                    width:259px;
+                    align-items: end;
+                    img{
+                        width:32px;
+                        height: 32px;
+                        border-radius: 50%;
+                    }
+                    .empl-department-desc{
+                        display: flex;
+                        flex-direction: column;
+                        width: 100%;
+                          .dep-name, .name{text-align: start;
+                        color: #474747;
+                        font-size: 11px;
+                        font-weight: 300;
+                    padding: 3px 0;
+                
+                    };
+                    .name{
+font-size: 14px !important;
+font-weight:400
+                    }
+                    }
+                 
+      
+                }
+            }
+            .task-deadline-details{
+            align-items: center;
+            .deadline-img{
+                margin-top: 0px;
+            }
+
+            }
+            .deadline{
+                font-size: 14px;
+                font-weight: 400;
+                width: 50%;
+            }
+        }
+    }
+
+//comment sections
+
+    .class-comment-sections{
+        width:741px;
+        // height: 150px;
+                background-color: #DDD2FF;
+        border-radius: 10px;
+        padding: 35px !important;
+        margin-top: 50px !important;
+        background-color: #DDD2FF;
+
+ 
+.all-comments-main-container{
+    @include flex-container;
+   gap:0;
+   
+  
+    .heading{
+        @include flex-row;
+        gap:7px;
+    font-size: 20px;
+            font-weight: bold;
+            align-items: center;
+        span{
+            background-color: #8338EC;
+            padding: 6px;
+            border-radius: 30px;
+            color: white
+        }
+    }
+
+.all-comments-section{
+    margin-top: 25px;
+    ul{
+        list-style: none;
+        li{
+            margin: 40px 0
+        }
+    }
+    .sub-comment{
+        margin-left: 45px;
+        margin-top: 20px;
+        display: flex;
+        @include flex-row;
+        gap:12px;
+        img{
+            width:38px;
+            height: 38px;
+            border-radius: 50%
+        };
+        .comment-content{
+            @include flex-container;
+            gap:14px;
+            .comment-author{
+                font-size: 18px;
+                color: #021526;
+                font-weight: bold
+            };
+            .comment-text{
+                font-size: 16px;
+                color: #021526
+            }
+        }
+    }
+}
+
+
+}
+    }
+}
+
+.img-container{
+    @include flex-row;
+    align-items: center;
+  width: 50%;
+    gap:6px;
+    margin-top: 10px;
+    img{
+        width: 24px;
+        height: 24px;
+    }
+    span{
+        font-size: 16px;
+        font-weight: 400px;
+        color: #474747;
+    }
+}

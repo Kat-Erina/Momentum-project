@@ -1,0 +1,16 @@
+<div class="comment-item">
+<img [src]="commentItem.author_avatar" alt="photo">
+<div class="comment-content">
+    <p class="comment-author">{{commentItem.author_nickname}}</p>
+    <p class="comment-text">{{commentItem.text}}</p>
+ @if(commentItem.sub_comments.length===0)   {<button  (click)="showCommentdiv.set(true)" class="reply"><img src="images/Left 2.svg"> <span>უპასუხე</span></button>}
+    
+</div>
+</div>
+<div class="reply-div">
+    @if(showCommentdiv()){
+        <div>
+            <app-comment [id]="commentItem.id" [target]="'reply'" (toggleCommentDiv)="toggleComment()"></app-comment>
+        </div>
+    }
+</div>

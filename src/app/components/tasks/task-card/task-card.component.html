@@ -1,11 +1,11 @@
-<div class="card-div" [class]="color">
+<div class="card-div" [class]="color"  (click)="idEmitterFn()">
     <div class="heading">
         <div class="status">
             <div class="priority">
                 <img alt="'priority'" [src]="task.priority.icon">
-                <span [ngClass]="getPriorityClass(task.priority.name)">{{task.priority.name}}</span>
+                <span [ngClass]="stylingService.getPriorityClass(task.priority.name)">{{task.priority.name}}</span>
             </div>
-            <div class="task-dep" [ngClass]="getDepartmentClass(task.department.name)"><p>
+            <div class="task-dep" [ngClass]="stylingService.getDepartmentClass(task.department.name)"><p>
                 {{task.department.name | shortenText }}
             </p></div>
         </div>

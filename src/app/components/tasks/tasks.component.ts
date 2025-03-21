@@ -31,8 +31,6 @@ constructor(private router: Router) {
   this.router.events
     .pipe(filter(event => event instanceof NavigationEnd))
     .subscribe((event: any) => {
-      console.log(event.url)
-      console.log(event)
       if (event.url!=('/')) {
       this.clearfilters()
       this.filtersService.array.set([])
@@ -124,4 +122,8 @@ this.loadallTasks()
 
     }
   }
+
+  navigateToTask(taskId: number) {
+    this.router.navigate(['/task', taskId]); }
+
 }

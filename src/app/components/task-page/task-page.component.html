@@ -81,7 +81,7 @@
        <app-comment [id]="task.id" [target]="'comment'"></app-comment>
 
        <div class="all-comments-main-container">
-        <p class="heading">კომენტარები <span class="comments-amount">10</span></p>
+        <p class="heading">კომენტარები <span class="comments-amount">{{this.commentsService.commentsLength()}}</span></p>
         <div class="all-comments-section">
             <ul>
                 @for(comment of commentsService.comments() ;track comment?.id){

@@ -8,8 +8,6 @@ export class CommentService{
 comments=signal<Comment[]>([]);
 taskId=signal<number>(0);
 showCommentdiv=signal(false);
+commentsLength=signal(0);
 
-addcomment(id:number, text:string){
-console.log(id, text)
-}
 }

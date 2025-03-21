@@ -36,7 +36,6 @@ criteriasArray.set([...criteriasArray(), item![0]])
   criteriasArray.set(criteriasArray().filter(i => i.id !== item![0].id || i.name !== item![0].name))
   return
 }
-console.log(criteriasArray())
 }
 
 getValue(event:Event){
@@ -72,7 +71,6 @@ this.filtersService.fileteringCriterias.update(
 }
 
 filter(){
-  console.log(this.filtersService.fileteringCriterias())
   this.filtersService.filter(this.sharedService.aboutToStartTsks,this.filtersService.fileteringCriterias);
   this.filtersService.filter(this.sharedService.inProgressTsks,this.filtersService.fileteringCriterias)
   this.filtersService.filter(this.sharedService.readyForTestingTasks,this.filtersService.fileteringCriterias)
@@ -82,17 +80,16 @@ filter(){
   if(this.target==='departments'){
     this.filtersService.departmentIsOpen.set(false);
     this.filtersService.addUniqueItems(this.filtersService.fileteringCriterias().departments);
-    console.log(this.filtersService.fileteringCriterias())
+ 
   }
   if(this.target==='priorities'){
     this.filtersService.priorityIsOpen.set(false);
     this.filtersService.addUniqueItems(this.filtersService.fileteringCriterias().priorities);
-    console.log(this.filtersService.fileteringCriterias())
+   
   }
   if(this.target==='employees'){
     this.filtersService.employyesAreOpen.set(false);
     this.filtersService.addUniqueItems(this.filtersService.fileteringCriterias().employees);
-    console.log(this.filtersService.fileteringCriterias())
 
   }
  }

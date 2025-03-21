@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, input, Input, Output, signal } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, input, Input, Output, signal } from '@angular/core';
 import { CommentService } from '../../../core/services/comments-service.service';
 import { ApiService } from '../../../core/services/api.service';
 
@@ -14,12 +14,12 @@ commentService=inject(CommentService)
 apiService=inject(ApiService)
 value=signal('')
 @Input() target=""
-@Output() toggleCommentDiv = new EventEmitter<void>(); // Emits event to parent
+@Output() toggleCommentDiv = new EventEmitter<void>();
+destroyRef=inject(DestroyRef)
 
-// taskId=input.required<number>()
 
 toggle() {
-  this.toggleCommentDiv.emit(); // Trigger event when called
+  this.toggleCommentDiv.emit(); 
 }
 
 text="";
@@ -27,38 +27,70 @@ text="";
 handlechange(event:Event){
 const value=(event.target as HTMLTextAreaElement).value;
 this.value.set(value);
-console.log(value);
-console.log(this.id)
+
 }
 
 handlecommentAdd(){
   if(this.target==="comment"){
-    this.apiService.addComment(this.id,{'text':this.value()}).subscribe({
-      next:(response)=>{console.log(response);
+    if(/^(?!\s*$).+/.test(this.value()) ){
+      
+    let subsc=this.apiService.addComment(this.id,{'text':this.value()}).subscribe({
+      next:(response)=>{
         if(response){
-          this.apiService.getTaskComments(this.id).subscribe({
-            next:response=>{console.log(response);
+         let subsc= this.apiService.getTaskComments(this.id).subscribe({
+            next:response=>{
               this.commentService.comments.set(response)
-              this.toggle()
-            }
+              this.toggle();
+              this.commentService.commentsLength.set(this.commentService.commentsLength()+1)
+              this.value.set("")
+            },
+            error:(error)=>{console.log(error)}
+          });
+          this.destroyRef.onDestroy(()=>{
+            subsc.unsubscribe()
           })
         }
-      }
-    })
+      },
+      error:(error)=>{console.log(error)}
+    });
+
+    this.destroyRef.onDestroy(()=>{subsc.unsubscribe()})
+    } else{
+      alert('ცარიელი კომენტარის დაწერა შეუძლებელია')
+    }
+   
   }
  if(this.target==='reply'){
-  this.apiService.addComment(Number(this.commentService.taskId()),{'text':this.value(), 'parent_id':this.id}).subscribe({
-    next:(response)=>{console.log(response);
-      if(response){
-        this.apiService.getTaskComments(this.commentService.taskId()).subscribe({
-          next:response=>{console.log(response);
-            this.commentService.comments.set(response)
-            
+    if(/^(?!\s*$).+/.test(this.value()) ){
+    let subsc=this.apiService.addComment(Number(this.commentService.taskId()),{'text':this.value(), 'parent_id':this.id}).subscribe({
+        next:(response)=>{
+          if(response){
+           let subsc=this.apiService.getTaskComments(this.commentService.taskId()).subscribe({
+              next:response=>{
+                this.commentService.comments.set(response)
+                this.toggle();
+                this.commentService.commentsLength.set(this.commentService.commentsLength()+1);
+                this.value.set("")
+              },
+              error:(error)=>{console.log(error)}
+            });
+
+            this.destroyRef.onDestroy(()=>{
+              subsc.unsubscribe()
+            })
           }
-        })
-      }
+        },
+        error:(error)=>{
+          console.log(error)
+        }
+      });
+      this.destroyRef.onDestroy(()=>{
+        subsc.unsubscribe()
+      })
+    } 
+    else{
+      alert('ცარიელი კომენტარის დაწერა შეუძლებელია')
     }
-  })
  }
  
 }

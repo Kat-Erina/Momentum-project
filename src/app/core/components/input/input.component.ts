@@ -25,7 +25,6 @@ focused=signal(false)
 onInputChange(value: string) {
   this.focused.set(true)
   this.modelChange.emit(value); 
-  console.log(this.formSubmited())
 }
 
 

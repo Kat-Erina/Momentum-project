@@ -17,7 +17,6 @@ apiService=inject(ApiService);
 
 
 toggleComment() {
-  this.showCommentdiv.set(!this.showCommentdiv()); // Toggle value
-  console.log(this.showCommentdiv)
+  this.showCommentdiv.set(!this.showCommentdiv()); 
 }
 }

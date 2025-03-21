@@ -17,7 +17,7 @@ h1{
 
     form{
         @include flex-row;
-        gap:55px;
+        gap:85px;
         .sub-container-one{
             width:550px;
             @include flex-container;
@@ -72,6 +72,30 @@ h1{
             width:100%;
             @include flex-container;
             }
+
+            .deadline {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                margin-top: 90px;
+                width: 50%;
+
+                label{
+                    font-size: 16px;
+                    font-weight: lighter;
+                    font-family: 'FiraGo';
+                }
+                input{
+                    width: 100%;
+                    padding: 12px;
+                    font-size: 14px;
+                    border-radius: 5px;
+                    border: 1px solid #DEE2E6;
+                }
+              
+              }
+              
+              
     }
     }
 }

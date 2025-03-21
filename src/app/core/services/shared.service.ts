@@ -1,4 +1,4 @@
-import { inject, Injectable, Signal, signal } from "@angular/core";
+import { DestroyRef, inject, Injectable, Signal, signal } from "@angular/core";
 import { Department, Employee, Priority, Task } from "../models/models";
 import { ApiService } from "./api.service";
 
@@ -6,6 +6,7 @@ import { ApiService } from "./api.service";
     providedIn:'root'
 })
 export class SharedService{
+  destroyRef=inject(DestroyRef)
 employeeModalIsOpen=signal(false);
 employees=signal<Employee[]>([]);
 departmentId=signal<number|undefined>(0)
@@ -28,41 +29,67 @@ finishedTasks=signal<Task[]>([])
 
 
 loadEmployees(){
-    this.apiService.getEmployees().subscribe({
+  let sbsc=this.apiService.getEmployees().subscribe({
         next:(response)=>{
         let data=response.filter(empl=>{
             return empl.department.id===this.departmentId()
           });
     this.employees.set(data)
+    console.log(this.employees())
+        },
+        error:(error)=>{
+          console.log(error)
         }
+      });
+
+      this.destroyRef.onDestroy(()=>{
+        sbsc.unsubscribe()
       })
+
 }
 
 getDepartments(){
-    this.apiService.getDepartments().subscribe({
+   let subsc= this.apiService.getDepartments().subscribe({
         next:(response)=>{
           this.departments.set(response)
           this.data.set(response)
+        },
+        error:(error)=>{
+          console.log(error)
         }
+      });
+
+      this.destroyRef.onDestroy(()=>{
+        subsc.unsubscribe()
       })
 }
 
 getAllEmployees(){
-    this.apiService.getEmployees().subscribe({
+  let subsc=this.apiService.getEmployees().subscribe({
         next:(response)=>{
           this.allEmployees.set(response)
           this.data.set(response)
-          console.log(this.data())
-        }
-      })
+        },
+        error:(error)=>console.log(error)
+      });
+
+    this.destroyRef.onDestroy(()=>{
+      subsc.unsubscribe()
+    })
 }
 
 getPriorities(){
-    this.apiService.getPriorities().subscribe({
+   let subsc=this.apiService.getPriorities().subscribe({
         next:(response)=>{
           this.priorities.set(response)
           this.data.set(response)
+        },
+        error:(error)=>{
+          console.log(error)
         }
+      });
+      this.destroyRef.onDestroy(()=>{
+        subsc.unsubscribe()
       })
 }
 

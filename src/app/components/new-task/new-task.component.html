@@ -11,10 +11,10 @@
     <textarea [ngClass]="{'invalid-border':formSubmited()&& description.length>255 || formSubmited()&& (description.length>0 && doesNotHaveEnoughWords())}" (ngModelChange)="handleTextAreaValueChange($event)" name="description" [(ngModel)]="description" ></textarea>
 <span [ngClass]="{
     'valid': descriptionFocused() && description.length>0 && !doesNotHaveEnoughWords(),
-    'invalid': (formSubmited() && description.length>0 && doesNotHaveEnoughWords() ) ||( !formSubmited() && descriptionFocused() )
+    'invalid': (formSubmited() && description.length>0 && doesNotHaveEnoughWords() ) ||( !formSubmited() && descriptionFocused()&& description.length>0 && doesNotHaveEnoughWords() )
   }">მინიმუმ 4 სიტყვა</span>
 <span  [ngClass]="{
-    'valid': descriptionFocused()&& description.length <= 255 ,
+    'valid': descriptionFocused()&& description.length>0&&  description.length <= 255 ,
     'invalid': (formSubmited() && description.length >255) || !formSubmited() && descriptionFocused() && description.length >255
   }">მაქსიმუმ 255 სიმბოლო</span>
 </div> 
@@ -32,13 +32,19 @@
        
         </div>
       <div class="employee-container">
+     <!-- @if(selectedDepartmentOption()){ -->
         <app-dropdown [customclass]="'dropdown-options'" [label]="'პასუხისმგებელი თანამშრომელი*'" [formSubmited]="formSubmited" [dropDownTarget]="'employees'" [data]="employees" [selectedOption]="selectedEmployee" (selectEmitter)="handleChange($event)" [dropdownOpen]="dropdownOpenEmployees"/>
+     <!-- }   -->
 
 
             </div>
             <div class="deadline">
-                <label>დედლაინი*</label>
-                <input type="date">
+
+                <label [ngClass]="{'invalid':formSubmited() &&compareDates(),
+                    'valid':formSubmited() && !compareDates()
+                }" for="customDate">დედლაინი</label>
+                <input type="date" id="customDate" [(ngModel)]="selectedDate" name="date">
+
             </div>
            <div class="btn-div">
             <button type="submit">დავალების შექმნა</button>

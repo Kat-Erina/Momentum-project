@@ -39,4 +39,18 @@ styleBorders(priorityName: string): string {
   return prioritycolors[priorityName];
 }
 
+validateMaxLength(value:string, num:number){
+  if (!value || value.trim() === '') {
+    return true; 
+  }
+const trimmedName = value.trim();
+  if (value.startsWith(' ') && trimmedName.replace(/[^a-zA-Zა-ჰ]/g, '').length < num) {
+    return false;
+  }
+  if (!/^[a-zA-Zა-ჰ\s]+$/.test(value)) {
+    return false; 
+  }
+  return value.replace(/[^a-zA-Zა-ჰ]/g, '').length <= 255;
+}
+
 }

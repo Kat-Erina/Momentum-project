@@ -10,8 +10,7 @@ import { SharedService } from '../../core/services/shared.service';
 })
 export class HeaderComponent {
   service=inject(SharedService)
-  employeeModalIsOpen=this.service.employeeModalIsOpen
   opendialog(){
-this.employeeModalIsOpen.set(true)
+this.service.employeeModalIsOpen.set(true);
   }
 }

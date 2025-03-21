@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
 import { Department, Employee, Priority, Status } from '../../core/models/models';
 import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,15 +19,18 @@ export class NewTaskComponent implements OnInit {
   router=inject(Router)
   apiService=inject(ApiService);
   service=inject(SharedService);
+  destroyRef=inject(DestroyRef)
   title:string="";
-  description:string=" ";
+  description:string="";
   descriptionFocused=signal<boolean>(false);
-  departmentId=this.service.departmentId
+  departmentId=this.service.departmentId;
+
+  initialDate=this.getTomorrowDate();
+  selectedDate=this.initialDate;
+
 
   handleTitleValueChange(value: string) {
-    console.log(value)
     this.updateFieldData('title', value,)
-
   }
 
   get isTitleLengthValid(): boolean {
@@ -40,12 +43,18 @@ export class NewTaskComponent implements OnInit {
 
   doesNotHaveEnoughWords=signal(true);
   checkWordCount(value:string) {
-    const words = value?.trim().split(/\s+/) || [];
-    this.doesNotHaveEnoughWords.set(words.length < 4)
+    if(value.length>0){ 
+         const words = value?.trim().split(/\s+/) || [];
+      this.doesNotHaveEnoughWords.set(words.length < 4)
+      console.log(this.doesNotHaveEnoughWords())
+    } else{
+      this.doesNotHaveEnoughWords.set(false);
+      console.log(this.doesNotHaveEnoughWords())
+    }
+
   }
 
   handleTextAreaValueChange(value:string){
-    console.log(value)
     this.descriptionFocused.set(true)
 this.description=value
 this.checkWordCount(value)
@@ -74,7 +83,7 @@ this.updateFieldData('description', value,)
   selectedEmployee=signal<Employee|null>(null);
 
   loadPriorities(){
-    this.apiService.getPriorities().subscribe({
+   let subs= this.apiService.getPriorities().subscribe({
       next:(response)=>{
           this.priorities.set(response);
           if(this.data?.['priority']){
@@ -84,7 +93,12 @@ this.updateFieldData('description', value,)
             // this.updateFieldData('priority', this.selectedOption())
           }
         
-      }
+      },
+      error:(error)=>{console.log(error)}
+    })
+
+    this.destroyRef.onDestroy(()=>{
+      subs.unsubscribe()
     })
   }
 
@@ -122,56 +136,87 @@ this.selectedEmployee.set(null);
 
 
   loadStatuses(){
-    this.apiService.getStatuses().subscribe({
+  let subsc=  this.apiService.getStatuses().subscribe({
       next:(response)=>{
         this.statuses.set(response)
         if(this.data?.['status']){
           this.selectedStatusOption.set(this.data?.['status']);
         } else{
           this.selectedStatusOption.set(response[0]);
-          // this.updateFieldData('status', this.selectedStatusOption())
         }
 
-      }
+      },
+      error:(error)=>{console.log(error)}
+    });
+
+    this.destroyRef.onDestroy(()=>{
+      subsc.unsubscribe()
     })
   }
 
   loadDepartments(){
-    this.apiService.getDepartments().subscribe({
+  let subsc=  this.apiService.getDepartments().subscribe({
       next:response=>{
         this.departments.set(response)
         if(this.data?.['department']){
           this.selectedDepartmentOption.set(this.data?.['department']);
         } 
-      }
+      },
+      error:(error)=>{console.log(error)}
+    });
+
+    this.destroyRef.onDestroy(()=>{
+      subsc.unsubscribe()
     })
   }
  
+  getTomorrowDate(): string {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1); 
+    return tomorrow.toISOString().split('T')[0]; 
+  }
+
+  compareDates(){
+  return  new Date(this.initialDate)>new Date(this.selectedDate)
+  }
   
   ngOnInit(): void {
-// localStorage.clear()
-console.log('title',this.title)
-
+    // localStorage.removeItem('taskData')
 let fetchedData=localStorage.getItem('taskData');
 if(fetchedData){
   this.data=JSON.parse(fetchedData);
-   this.title=this.data ? this.data['title'] : '';
-   this.description=this.data ? this.data['description'] : '';
+  if(this.data['title']){
+    this.title=this.data['title']
+  }
+  if(this.data['description']){
+    this.description=this.data['description'];
+    console.log(this.description)
+console.log(this.doesNotHaveEnoughWords())
+this.checkWordCount(this.description)
+console.log(this.doesNotHaveEnoughWords())
+  }
+  
    this.selectedDepartmentOption.set(this.data?.['department'])
+   console.log(this.selectedDepartmentOption())
    this.selectedStatusOption.set(this.data?.['status'])
    this.selectedOption.set(this.data?.['priority'])
 this.selectedEmployee.set(this.data?.['employee'])}
 this.loadPriorities();
 this.loadStatuses()
 this.loadDepartments();
+this.service.loadEmployees()
+
 
 if(this.selectedDepartmentOption()){
  this.service.loadEmployees()
   }}
  
+  //date
+
   
+
+
   toggleDropdownFn(option:string) {
-    console.log(option)
     if(option==="priorities"){
       this.dropdownOpen.set(!this.dropdownOpen()) ;
     }
@@ -201,29 +246,46 @@ updateFieldData(field:string, value:Priority|Status|Department|Employee|string|n
   localStorage.setItem('taskData', JSON.stringify(this.data));
 }
 
+// isPastDate(selectedDate: string): boolean {
+//   const today = new Date(); // Get today's date
+//   const selected = this.parseDate(selectedDate); 
 
+//   return selected < today;
+// }
 
   handleSubmit() {
-    this.formSubmited.set(true);
-if(this.selectedOption() && this.selectedStatusOption() && this.selectedDepartmentOption() && this.selectedEmployee() && this.title?.length>3 && this.title?.length<256 && this.description?.length<256 && !this.doesNotHaveEnoughWords())
+    
+ this.formSubmited.set(true);
+    console.log(this.compareDates())
+if(this.selectedOption() && this.selectedStatusOption() && this.selectedDepartmentOption() && this.selectedEmployee() && this.title?.length>3 && this.title?.length<256 && this.description?.length<256 && !this.doesNotHaveEnoughWords()
+&& !this.compareDates()) 
                 {
                   let data={
        
   name:this.title,
   description:this.description,
-  due_date: "2025-12-31",
+  due_date: this.selectedDate,
   status_id: this.selectedStatusOption()?.id,
   employee_id: this.selectedEmployee()?.id,
   priority_id: this.selectedOption()?.id
                   }
                   console.log(data)
-this.apiService.handleTaskSubmission(data).subscribe({
-  next:(response)=>{
-    if(response)
-    localStorage.removeItem('taskData');
-    this.router.navigate(['']);
-  }
-})} 
+// let subsc=this.apiService.handleTaskSubmission(data).subscribe({
+//   next:(response)=>{
+//     if(response)
+//     localStorage.removeItem('taskData');
+//     this.router.navigate(['']);
+//   },
+//   error:(error)=>{console.log(error)}
+  
+// });
+// this.destroyRef.onDestroy(()=>{
+//   subsc.unsubscribe()
+// })
+
+
+} 
+else {console.log('araa swori')}
     
 
 }

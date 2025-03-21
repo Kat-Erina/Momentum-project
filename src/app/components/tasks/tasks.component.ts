@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
 import { Department, Employee, Priority, Task } from '../../core/models/models';
 import { StatusComponent } from "../../core/components/status/status.component";
@@ -26,9 +26,10 @@ allEmployees=signal<Employee[]>([])
 priorities=signal<Priority[]>([])
 data=this.service.data
 target=signal('')
+destroyRef=inject(DestroyRef)
 
 constructor(private router: Router) {
-  this.router.events
+  let subsc =  this.router.events
     .pipe(filter(event => event instanceof NavigationEnd))
     .subscribe((event: any) => {
       if (event.url!=('/')) {
@@ -36,10 +37,14 @@ constructor(private router: Router) {
       this.filtersService.array.set([])
       }
     });
+    this.destroyRef.onDestroy(()=>{
+      subsc.unsubscribe()
+    })
+    ;
 }
 
 loadallTasks(){
-  this.apiService.getAllTasks().subscribe({
+ let subsc= this.apiService.getAllTasks().subscribe({
     next:(response)=>{
       this.service.allTasks.set(response)
       this.service.storedTasks.set(response)
@@ -62,7 +67,14 @@ loadallTasks(){
       }))
       this.filtersService.filter(this.service.finishedTasks,this.filtersService.fileteringCriterias)
 
+    },
+    error:(error)=>{
+      console.log(error)
     }
+  });
+
+  this.destroyRef.onDestroy(()=>{
+    subsc.unsubscribe()
   })
 }
 

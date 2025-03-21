@@ -26,7 +26,6 @@ service=inject(SharedService)
 @Output() toggleDropdown=new EventEmitter<any>()
 
 handleToggle(option:any){
-  console.log(option)
  this.toggleDropdown.emit(option)
  this.dropdownOpen.set(!this.dropdownOpen())
 }

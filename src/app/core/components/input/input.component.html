@@ -1,11 +1,11 @@
 <label >{{labelValue}}</label>
-<input type="text" [ngModel]="model" (ngModelChange)="onInputChange($event)" name="title" [ngClass]="{'invalid-border':formSubmited() && !isMinimumLengthValid || formSubmited() && model.length>255}"
+<input type="text" [ngModel]="model" (ngModelChange)="onInputChange($event)" name="title" [ngClass]="{'invalid-border':formSubmited() && (!isMinimumLengthValid ) || !formSubmited() && !isMaximumLengthValid}"
   >
 <span [innerHTML]="minimumChar" [ngClass]="{
     'valid':focused() && isMinimumLengthValid,
     'invalid':formSubmited()   && !isMinimumLengthValid ||focused() &&  !formSubmited() && !isMinimumLengthValid
   }">{{minimumChar}}</span>
 <span [innerHTML]="maximumChar" [ngClass]="{
-    'valid':focused() &&   isMaximumLengthValid,
+    'valid':focused() && model.length!=0&&   isMaximumLengthValid,
     'invalid':(formSubmited() && !isMaximumLengthValid) || !formSubmited() && !isMaximumLengthValid 
   }">{{maximumChar}}</span>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { InputComponent } from "../../core/components/input/input.component";
 import { ApiService } from '../../core/services/api.service';
 import { HttpClient } from '@angular/common/http';
@@ -6,6 +6,7 @@ import { Department, Employee } from '../../core/models/models';
 import { DropdownComponent } from "../../core/components/dropdown/dropdown.component";
 import { SharedService } from '../../core/services/shared.service';
 import { CommonModule } from '@angular/common';
+import { StylingService } from '../../core/services/styling.service';
 
 @Component({
   selector: 'app-employee-modal',
@@ -14,12 +15,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './employee-modal.component.scss'
 })
 export class EmployeeModalComponent implements OnInit {
+  destroyRef=inject(DestroyRef)
 formSubmited=signal(false)
 name="";
 surname=""
 imageSrc = signal<string |ArrayBuffer| null>('');
 apiService=inject(ApiService)
 service=inject(SharedService)
+stylingService=inject(StylingService)
 http=inject(HttpClient)
 departments=signal<Department[]>([]);
 selectedDepartment=signal<any>(null);
@@ -30,26 +33,34 @@ photo=signal<any>({})
 
 
   get isNameMinimumLengthValid(): boolean {
-    return /^(?!\s)(?=(?:.*[a-zA-Zა-ჰ]){2,})[a-zA-Zა-ჰ\s]+$/.test(this.name);
+    return /^(?!\s+$)(?=(?:.*[a-zA-Zა-ჰ]){2,})[a-zA-Zა-ჰ\s]+$/.test(this.name);
+
   }
   get isSurnameMinimumLengthValid(): boolean {
-    return /^(?!\s)(?=(?:.*[a-zA-Zა-ჰ]){2,})[a-zA-Zა-ჰ\s]+$/.test(this.surname);
-  }
+    return /^(?!\s+$)(?=(?:.*[a-zA-Zა-ჰ]){2,})[a-zA-Zა-ჰ\s]+$/.test(this.surname);
+    }
 
-  get isNameMaximumLengthValid(): boolean {
-    const lettersOnly = this.name.replace(/[^a-zA-Zა-ჰ]/g, '');
-  return lettersOnly.length <= 255
-  }
+    get isNameMaximumLengthValid(): boolean {
+      return this.stylingService.validateMaxLength(this.name,2)
+    }
+
+
   get isSurnameMaximumLengthValid(): boolean {
-    const lettersOnly = this.name.replace(/[^a-zA-Zა-ჰ]/g, '');
-    return lettersOnly.length <= 255
+    return this.stylingService.validateMaxLength(this.surname,2)
   }
 
 ngOnInit(): void {
-  this.apiService.getDepartments().subscribe({
+let subsc=this.apiService.getDepartments().subscribe({
     next:(response)=>{
       this.departments.set(response)
+    },
+    error:(error)=>{
+      console.log(error)
     }
+  })
+
+  this.destroyRef.onDestroy(()=>{
+    subsc.unsubscribe()
   })
 }
 
@@ -116,17 +127,24 @@ event.stopPropagation()
   formData.append('name', this.name);
   formData.append('surname', this.surname);
   formData.append('department_id', this.selectedDepartment().id);
-this.apiService.addEmployee(formData).subscribe(
+
+let subsc= this.apiService.addEmployee(formData).subscribe(
   {
     next:(response)=>{
       if(response){
         this.service.employeeModalIsOpen.set(false);
         this.service.loadEmployees()
       }
+    },
+    error:(error)=>{
+      console.log(error)
     }
-
   }
-)
+);
+
+this.destroyRef.onDestroy(()=>{
+  subsc.unsubscribe()
+})
 }    
  } 
   

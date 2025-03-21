@@ -1,4 +1,4 @@
 <div class="comment-container">
-    <textarea (input)="handlechange($event)" placeholder="დაწერე კომენტარი" class="comment-text"></textarea>
+    <textarea (input)="handlechange($event)" [value]="value()" placeholder="დაწერე კომენტარი" class="comment-text"></textarea>
    <div class="btn-div"> <button class="submit-comment" (click)="handlecommentAdd()">დააკომენტარე</button></div>
 </div>

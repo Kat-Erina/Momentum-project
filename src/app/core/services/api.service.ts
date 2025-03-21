@@ -8,7 +8,7 @@ import { Comment, Department, Employee, Priority, Status, Task } from "../models
 export class ApiService{
 http=inject(HttpClient);
 apiUrl="https://momentum.redberryinternship.ge/api";
-private token="9e77d81b-97b7-44c5-af98-524985d04c02";
+private token="9e7c9ccc-25fe-4d4e-a0cb-2de10adeae78";
 
     getAllTasks(){
         const headers = new HttpHeaders({
